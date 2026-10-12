@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#176653"><meta name="description" content="看列的位置，找因数线索，一起玩九九乘法猜牌。">
+<title>九九乘法牌 · 数字小侦探</title>
+<style>
+:root{--ink:#213b35;--muted:#6b7c72;--green:#176653;--lime:#def28e;--cream:#f8f6ed;--line:#e4e8dd;--orange:#eb8d4b;--shadow:0 12px 35px #294b3210}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"PingFang SC","Microsoft Yahei",sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.45}button,input,select{border-radius:12px}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--orange);outline-offset:3px}[hidden]{display:none!important}.wrap{max-width:1220px;margin:auto;padding:28px 30px 50px}header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:13px}.brandmark{background:var(--green);color:var(--lime);width:48px;height:48px;border-radius:17px;display:grid;place-items:center;font-size:31px;font-weight:800;transform:rotate(-6deg)}h1{font-size:23px;margin:0;letter-spacing:1px}.subtitle{font-size:12px;color:var(--muted);margin-top:5px}.tools{display:flex;gap:8px}.ghost{background:white;border:1px solid var(--line);padding:10px 15px;color:var(--ink)}.primary{background:var(--green);color:white;border:0;padding:13px 20px;font-weight:700}.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px 30px;background:var(--green);border-radius:24px;color:white;margin-bottom:22px;position:relative;overflow:hidden}.hero:after{content:"×";font-size:170px;font-weight:900;position:absolute;right:35px;top:-40px;opacity:.06;pointer-events:none}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:8px}.hero h2{font-size:27px;margin:0 0 8px}.hero p{font-size:14px;margin:0;color:#d4e5dd}.turnpill{background:var(--lime);color:var(--green);border-radius:30px;padding:11px 20px;white-space:nowrap;font-weight:800;font-size:14px;z-index:1}.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:22px}.panel{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}.boardhead{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line);gap:10px}.player{display:flex;gap:10px;align-items:center}.avatar{width:35px;height:35px;background:#eef2e6;border-radius:12px;display:grid;place-items:center;font-size:19px}.player strong{font-size:15px}.caption{font-size:11px;color:var(--muted);margin-top:4px}.counter{font-size:12px;color:var(--muted);white-space:nowrap}.counter b{font-size:17px;color:var(--green)}.columns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:16px 20px 20px}.col{min-width:0;display:flex;flex-direction:column}.coltitle{text-align:center;font-size:12px;font-weight:700;background:#f2f4ed;border-radius:8px;padding:7px;margin-bottom:12px}.cards{display:flex;flex-direction:column-reverse;align-items:center;flex:1;gap:7px;min-height:116px;align-content:flex-start}.empty{font-size:11px;color:#a3b0a6;margin-top:32px}.card{position:relative;width:64px;height:88px;border-radius:13px;border:1.5px solid #d2ded2;background:#f8faf3;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--green);padding:5px;transition:transform .15s,box-shadow .15s}.card:disabled{opacity:1}.card:hover:not(:disabled){transform:translateY(-3px)}.card.back{background:var(--green);border-color:var(--green);color:white;background-image:radial-gradient(#ffffff12 1.2px,transparent 1.2px);background-size:9px 9px}.card.selected{outline:3px solid var(--orange);outline-offset:3px;box-shadow:0 5px 15px #ed985934;transform:translateY(-3px)}.card .value{font-size:28px;font-weight:850;line-height:1.2}.card .small{font-size:9px;margin-top:6px;letter-spacing:1px;opacity:.7}.card.known{background:#f0f2ec;border:1.5px dashed #bdc9bc;color:#89968b;opacity:1}.card.known .check{position:absolute;right:5px;top:4px;font-size:11px}.card.own{background:#fffaf0;border-color:#e4d7ba;color:#735c3c}.card.own .small{letter-spacing:0}.between{padding:13px;text-align:center;color:var(--green);font-size:12px;font-weight:700;letter-spacing:1px}.sidebar{display:flex;flex-direction:column;gap:16px}.action{padding:21px}.sectiontag{font-size:10px;color:var(--muted);letter-spacing:1px}.action h3{font-size:18px;margin:9px 0}.action p{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 15px}.selection{background:#f3f6ec;border-radius:12px;padding:12px;font-size:13px;line-height:1.6;margin-bottom:14px}.guessrow{display:flex;gap:8px}.guessrow input{width:100%;min-width:0;border:1px solid #ccd6c7;padding:12px;text-align:center;font-size:21px;font-weight:700;color:var(--green)}.guessrow button{white-space:nowrap;padding:12px 15px}.feedback{font-size:12px;line-height:1.7;min-height:34px;margin-top:12px;color:#866037}.hintbtn{border:0;background:none;color:var(--green);padding:10px 0;font-size:12px;text-decoration:underline;text-underline-offset:3px}.candidates{display:flex;gap:6px;flex-wrap:wrap}.candidate{background:white;border:1px solid #d0ddc5;color:var(--green);padding:6px 10px;font-size:13px}.hintnote{font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px}.journal{padding:19px 21px}.journal h3{font-size:14px;margin:0 0 12px}.log{max-height:225px;overflow:auto;font-size:12px;line-height:1.8;color:var(--muted)}.log p{margin:0;padding:8px 0;border-bottom:1px solid #edf0e7}.log p:first-child{color:var(--ink)}.tips{padding:18px 21px;background:#eaf0dc;border-radius:20px;font-size:12px;line-height:1.9;color:#5d704c}.tips strong{color:var(--green)}footer{font-size:11px;line-height:1.8;color:var(--muted);margin:21px 0 0;text-align:center}.overlay{position:fixed;inset:0;background:#17352dc9;backdrop-filter:blur(8px);z-index:10;display:grid;place-items:center;padding:18px}.dialog{background:var(--cream);border-radius:26px;padding:28px;max-width:500px;width:100%;box-shadow:0 30px 90px #0003;max-height:90vh;overflow:auto}.dialog h2{margin:0 0 12px;font-size:25px}.dialog p{font-size:14px;line-height:1.8;color:var(--muted)}.dialog label{display:block;font-size:13px;font-weight:700;margin:17px 0 7px}.dialog select{width:100%;padding:12px;border:1px solid #d3decc;background:white;color:var(--ink)}.dialog .actions{display:flex;gap:10px;margin-top:23px}.dialog .actions button{flex:1}.close{float:right;border:0;background:none;font-size:24px;color:var(--muted);padding:0 5px}.rulelist{padding-left:20px;font-size:14px;line-height:1.9;color:#52675a}.gate{text-align:center}.gate .bigemoji{font-size:56px;margin:15px}.badge{display:inline-block;background:#eef2df;color:var(--green);font-size:12px;border-radius:20px;padding:7px 11px}.error{color:#a43d2e}.mode-chip{font-size:11px;border-radius:9px;background:#eaf0dd;color:var(--green);padding:6px 9px}
+@media(max-width:950px){.layout{grid-template-columns:minmax(0,1fr) 255px}.columns{padding:15px 12px;gap:7px}.card{width:57px;height:81px}.wrap{padding:22px 20px}}
+@media(max-width:720px){.wrap{padding:17px 12px 30px}header{gap:10px;margin-bottom:17px}.brandmark{width:39px;height:39px;font-size:26px;border-radius:13px}h1{font-size:18px}.subtitle{font-size:10px}.ghost{padding:9px 11px;font-size:12px}.tools{gap:5px}.hero{padding:20px;margin-bottom:16px;gap:10px;border-radius:20px}.hero h2{font-size:21px}.hero p{font-size:12px}.turnpill{padding:8px 12px;font-size:11px}.eyebrow{font-size:9px}.layout{display:flex;flex-direction:column;gap:15px}.sidebar{display:contents}.action{order:-1;padding:16px}.action .sectiontag,.action h3,.action>p{display:none}.selection{margin-bottom:10px}.feedback{min-height:0;margin-top:8px}.boardhead{padding:15px}.cards{min-height:98px;gap:6px}.card{width:54px;height:76px;border-radius:10px}.card .value{font-size:25px}.card .small{font-size:8px}.columns{padding:13px 10px;gap:7px}.coltitle{font-size:11px;padding:6px}.between{padding:10px}.journal{padding:16px}.log{max-height:140px}.tips{padding:14px 17px}.counter{font-size:10px}.dialog{padding:25px 21px}footer{text-align:left;padding:0 5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.boardfooter{border-top:1px solid var(--line);padding:12px 20px}.boardfooter .feedback{margin:0;min-height:0}.card.editor{width:104px;max-width:100%;padding:8px;background:#f5f9e8;color:var(--green);cursor:default;transform:none}.editor-label{font-size:10px;margin-bottom:7px;white-space:nowrap}.editor-row{display:flex;align-items:center;gap:5px;width:100%;min-width:0}.editor input{width:100%;min-width:0;height:42px;border:1px solid #c3d2ad;border-radius:8px;background:white;color:var(--green);text-align:center;padding:2px;font-size:23px;font-weight:800;-moz-appearance:textfield}.editor input::-webkit-inner-spin-button,.editor input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.editor-controls{display:flex;flex-direction:column;gap:3px}.editor-controls button{width:27px;height:25px;min-height:0;border:0;border-radius:6px;font-size:17px;padding:0;line-height:1;font-weight:800}.confirm-guess{background:var(--green);color:white}.cancel-guess{background:#e5eadd;color:#586b57}.editor input:focus-visible{outline:2px solid var(--green);outline-offset:1px}@media(max-width:720px){.boardfooter{padding:11px 14px}.card.editor{height:76px;padding:5px}.editor-label{font-size:9px;margin-bottom:4px}.editor-row{gap:3px}.editor input{height:38px;font-size:21px}.editor-controls button{width:24px;height:23px;font-size:16px}}
+.card.missed{border:2px solid var(--orange);box-shadow:0 0 0 1px #edb67e66}.card.missed .value{font-size:24px;margin-top:8px}.card.missed .small{margin-top:3px;font-size:8px}.miss-badge{position:absolute;top:3px;right:3px;background:#f8b16c;color:#543716;font-size:8px;font-weight:800;line-height:1;padding:3px 4px;border-radius:5px}.miss-value{font-size:9px;font-weight:700;line-height:1.2;color:#88491d;background:#ffedce;border-radius:4px;padding:2px 4px;margin-top:4px;white-space:nowrap}.misses-note{font-size:12px;line-height:1.7;color:#915225;margin:9px 0 0}@media(max-width:720px){.card.missed .value{font-size:23px;margin-top:7px}.card.missed .small{font-size:7px;margin-top:2px}.miss-badge{font-size:7px;padding:2px 3px;top:2px;right:2px}.miss-value{font-size:8px;margin-top:3px;padding:1px 3px}}
+.card .small{white-space:nowrap;letter-spacing:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="brand"><div class="brandmark" aria-hidden="true">×</div><div><h1>九九乘法牌</h1><div class="subtitle">数字小侦探 · 从线索找到答案</div></div></div><div class="tools"><button class="ghost" id="rulesBtn">怎么玩</button><button class="ghost" id="settingsBtn">新对局</button></div></header>
+<section class="hero"><div><div class="eyebrow">Little number detectives</div><h2 id="heroTitle">每一张牌，都藏着线索。</h2><p id="heroText">看范围、位置和提示，找出对方的数字。</p></div><div class="turnpill" id="turnPill">准备开始</div></section>
+<main class="layout" id="gameArea">
+<div><section class="panel" aria-label="对方的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">🔎</span><div><strong id="opponentName">电脑小侦探</strong><div class="caption">右小左大、下小上大 · 点选一张来猜</div></div></div><div class="counter" id="opponentCount"></div></div><div class="columns" id="opponentBoard"></div><div class="boardfooter"><div id="feedback" class="feedback" aria-live="polite"></div><div id="inlineHints" hidden><div class="misses-note" id="missesNote" hidden></div><button class="hintbtn" id="hintBtn">💡 看看可能的数字</button><div id="hintArea" hidden><div class="candidates" id="candidates"></div><div class="hintnote">结合牌的位置和背面提示，排除你桌上的数字、翻开的数字及猜错过的数字。</div></div></div></div></section><div class="between" id="deckCount">公共牌堆 · 两人共用</div><section class="panel" aria-label="自己的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">🙂</span><div><strong id="ownName">我的牌</strong><div class="caption">数字朝向你 · 下方小字是对方看到的因数</div></div></div><div class="counter" id="ownCount"></div></div><div class="columns" id="ownBoard"></div></section></div>
+<aside class="sidebar"><section class="panel journal"><h3>📝 对局记录 <span class="mode-chip" id="modeChip"></span></h3><div id="log" class="log" aria-live="polite"></div></section><div class="tips"><strong>小侦探口诀</strong><br>先看数字在哪一列，<br>下小上大，右小左大。<br>自己的牌也能帮你排除答案！</div></aside>
+</main><footer>按课堂描述制作的家庭版 · 因数在每局开局时随机分配 · 对局自动保存在本机浏览器</footer>
+</div>
+<div class="overlay" id="settingsOverlay" hidden><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><button class="close" id="closeSettings" aria-label="关闭设置">×</button><span class="badge">准备好了吗？</span><h2 id="settingsTitle" style="margin-top:14px">开始一场数字探险</h2><p>猜对翻开留桌，猜错对方加两张。两人轮流行动，先猜完对方桌上的牌就赢。</p><label for="mode">和谁一起玩</label><select id="mode"><option value="ai">我和电脑</option><option value="local">两个人 · 同一台设备轮流玩</option></select><label for="difficulty">电脑思考方式</label><select id="difficulty"><option value="easy">轻松练习 · 随机选择线索</option><option value="smart">认真挑战 · 优先猜线索最明确的牌</option></select><label for="range">牌的范围</label><select id="range"><option value="1-39">1–39 · 共39张，放入公共牌堆</option><option value="0-39">0–39 · 共40张，放入公共牌堆</option></select><label for="factorMode">牌背提示怎么分配</label><select id="factorMode"><option value="random">随机因数 · 优先使用2–9</option><option value="all">随机因数 · 从1–9中选择</option></select><p style="font-size:11px">口诀内数字随机提示一个因数，两个乘数均为1–9，例如18可以提示2、3、6或9。口诀外数字显示X，例如11、13、17、22、33、39；0也显示X。每局开始后提示保持不变。</p><div class="actions"><button class="primary" id="startBtn">开始新对局 →</button></div><p id="savedNotice" style="font-size:11px" hidden>已有进行中的对局，关闭此窗口可以继续。</p></section></div>
+<div class="overlay" id="rulesOverlay" hidden><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="rulesTitle"><button class="close" id="closeRules" aria-label="关闭玩法">×</button><span class="badge">一分钟学会</span><h2 id="rulesTitle" style="margin-top:14px">当一个数字小侦探</h2><ol class="rulelist"><li>所有牌洗匀，放入公共牌堆。两人各抽4张，按数字范围放入四列。</li><li>四列从右向左依次是0–9、10–19、20–29、30–39；每列从下到上由小到大排列。你看得到自己的数字，以及对方牌背的提示：口诀内是一个因数，口诀外显示X。</li><li>点选对方一张未翻开的牌，在牌上输入数字，点✓确认；点×取消。</li><li>猜对：翻开留在桌上。猜错：对方从公共牌堆抽2张，插入对应列的正确位置；不足2张就全抽出。猜错的牌带橙色标记，显示上次猜错的数字，补牌后标记仍跟着原牌。</li><li>无论猜对、猜错，都换另一人行动。</li><li>先猜完对方桌上所有牌的人获胜，公共牌堆里未抽出的牌不计入胜负。</li></ol><p><strong>举个例子：</strong>一张牌在10–19列，提示因数2，它可能是10、12、14、16、18。如果12在你桌上，就可以排除它；如果它排在已翻开的14上方，就只可能是16或18。</p><p style="font-size:12px">同一个数字只有一张牌。电脑只根据桌上可见线索推理，不读取你的暗牌数字或未抽出的牌。双人模式换人时会遮住牌面。</p><div class="actions"><button class="primary" id="understood">我知道了</button></div></section></div>
+<div class="overlay" id="gateOverlay" hidden><section class="dialog gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle"><div class="bigemoji" aria-hidden="true">🙈</div><h2 id="gateTitle">把设备交给玩家1</h2><p>另一位玩家先转过身。准备好后，再打开自己的牌。</p><button class="primary" id="readyBtn">准备好了，查看我的牌</button></section></div>
+<div class="overlay" id="winnerOverlay" hidden><section class="dialog gate" role="dialog" aria-modal="true" aria-labelledby="winnerTitle"><div class="bigemoji" aria-hidden="true">🎉</div><h2 id="winnerTitle">你赢了！</h2><p id="winnerText"></p><div class="actions"><button class="ghost" id="reviewBtn">看看桌上的牌</button><button class="primary" id="againBtn">再来一局</button></div></section></div>
+<script id="gameEngine">
+const Game = (() => {
+ const rand=(n,rng)=>Math.min(n-1,Math.floor(rng()*n));
+ const shuffled=(a,rng)=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=rand(i+1,rng);[b[i],b[j]]=[b[j],b[i]];}return b;};
+ const sortTable=p=>p.table.sort((a,b)=>a.n-b.n);
+ const products=new Set(Array.from({length:9},(_,i)=>i+1).flatMap(a=>Array.from({length:9},(_,i)=>a*(i+1))));
+ const legalFactors=n=>Array.from({length:9},(_,i)=>i+1).filter(f=>n%f===0&&n/f>=1&&n/f<=9);
+ function randomClue(n,config,rng){let factors=legalFactors(n);if(!factors.length)return 'X';if(config.factorMode==='random'&&factors.length>1)factors=factors.filter(f=>f!==1);return factors[rand(factors.length,rng)];}
+ function create(options={},rng=Math.random){
+  const config={mode:'ai',difficulty:'easy',min:1,max:39,factorMode:'random',...options};
+  const cards=[];
+  for(let n=config.min;n<=config.max;n++)cards.push({id:n,n,column:Math.floor(n/10),factor:randomClue(n,config,rng),revealed:false,misses:[]});
+  const deck=shuffled(cards,rng),players=[{table:deck.splice(0,4)},{table:deck.splice(0,4)}];players.forEach(sortTable);
+  return {version:3,config,players,deck,turn:0,winner:null,moves:0,history:[],message:'从右向左看范围，再看每列里的大小顺序。'};
+ }
+ function migrate(s,rng=Math.random){
+  if(!s||![1,2,3].includes(s.version)||s.players?.length!==2||!['ai','local'].includes(s.config?.mode))return null;
+  if(s.version===1){s.deck=shuffled(s.players.flatMap(p=>p.reserve),rng);s.players.forEach(p=>{delete p.reserve;});s.version=2;}
+  for(const c of [...s.deck,...s.players.flatMap(p=>p.table)]){
+   c.column=Math.floor(c.n/10);
+   if(s.version<3&&!legalFactors(c.n).includes(c.factor))c.factor=randomClue(c.n,s.config,rng);
+  }
+  s.version=3;s.players.forEach(sortTable);return s;
+ }
+ function candidates(state,viewer,card){
+  const known=new Set(state.players[viewer].table.map(c=>c.n));
+  for(const p of state.players)for(const c of p.table)if(c.revealed)known.add(c.n);
+  // Table order and column are public clues. Never sort by hidden answers here.
+  const column=state.players[1-viewer].table.filter(c=>c.column===card.column),at=column.indexOf(card);
+  if(at<0)return [];
+  const domains=column.map(c=>{
+   if(c.revealed)return [c.n];
+   const values=[];
+   for(let n=Math.max(state.config.min,c.column*10);n<=Math.min(state.config.max,c.column*10+9);n++)if((c.factor==='X'?!products.has(n):products.has(n)&&n%c.factor===0&&n/c.factor<=9)&&!known.has(n)&&!c.misses.includes(n))values.push(n);
+   return values;
+  });
+  const forward=[],backward=[];
+  for(let i=0;i<domains.length;i++)forward[i]=domains[i].filter(n=>i===0||forward[i-1].some(p=>p<n));
+  for(let i=domains.length-1;i>=0;i--)backward[i]=domains[i].filter(n=>i===domains.length-1||backward[i+1].some(p=>p>n));
+  return forward[at].filter(n=>backward[at].includes(n));
+ }
+ function guess(state,actor,id,value){
+  if(state.winner!==null||state.turn!==actor)throw Error('还没轮到你。');
+  if(!Number.isInteger(value)||value<state.config.min||value>state.config.max)throw Error('请输入牌范围内的整数。');
+  const defender=state.players[1-actor],card=defender.table.find(c=>c.id===id&&!c.revealed);
+  if(!card)throw Error('请先选一张未翻开的牌。');
+  const correct=card.n===value;let added=0;
+  if(correct)card.revealed=true;
+  else{card.lastMiss=value;if(!card.misses.includes(value))card.misses.push(value);const extra=state.deck.splice(0,2);added=extra.length;defender.table.push(...extra);sortTable(defender);}
+  state.moves++;const event={actor,value,correct,added,round:state.moves};state.history.unshift(event);
+  if(defender.table.every(c=>c.revealed))state.winner=actor;else state.turn=1-actor;
+  return event;
+ }
+ function aiMove(state,rng=Math.random){
+  const options=state.players[0].table.filter(c=>!c.revealed).map(c=>({id:c.id,values:candidates(state,1,c)}));
+  const min=Math.min(...options.map(o=>o.values.length)),pool=state.config.difficulty==='smart'?options.filter(o=>o.values.length===min):options;
+  const option=pool[rand(pool.length,rng)];return {id:option.id,value:option.values[rand(option.values.length,rng)]};
+ }
+ return {create,migrate,candidates,guess,aiMove};
+})();
+</script>
+<script>
+(() => {
+const $=id=>document.getElementById(id),key='jiujiu-detective-v1';
+let state=null,selected=null,draft='',hints=false,gate=false,review=false,aiTimer=null;
+function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch{}}
+function load(){try{state=Game.migrate(JSON.parse(localStorage.getItem(key)));if(state)save();}catch{state=null;}}
+function name(i){return state.config.mode==='ai'?(i===0?'你':'电脑小侦探'):'玩家'+(i+1);}
+function viewer(){return state.config.mode==='ai'?0:state.turn;}
+function canGuess(){return state&&state.winner===null&&!gate&&(state.config.mode==='local'||state.turn===0);}
+function activeCard(){return selected===null?null:state.players[1-viewer()].table.find(c=>c.id===selected&&!c.revealed);}
+function cancelAI(){clearTimeout(aiTimer);aiTimer=null;}
+function hideOverlay(id){$(id).hidden=true;}
+function syncSettings(){if(!state)return; $('mode').value=state.config.mode;$('difficulty').value=state.config.difficulty;$('range').value=state.config.min+'-'+state.config.max;$('factorMode').value=state.config.factorMode;$('difficulty').disabled=state.config.mode==='local';}
+function openSettings(){syncSettings();$('settingsOverlay').hidden=false;$('closeSettings').hidden=!state;$('savedNotice').hidden=!state;$('mode').focus();}
+function start(){cancelAI();const [min,max]=$('range').value.split('-').map(Number);state=Game.create({mode:$('mode').value,difficulty:$('difficulty').value,min,max,factorMode:$('factorMode').value});selected=null;draft='';hints=false;review=false;hideOverlay('settingsOverlay');hideOverlay('winnerOverlay');gate=state.config.mode==='local';save();render();}
+function board(target,owner,isOwn){
+ const root=$(target);root.replaceChildren();
+ for(let col=3;col>=0;col--){
+  const section=document.createElement('div');section.className='col';const title=document.createElement('div');title.className='coltitle';title.textContent=col*10+'–'+(col*10+9);section.append(title);const list=document.createElement('div');list.className='cards';
+  const cards=state.players[owner].table.filter(c=>c.column===col);
+  for(const card of cards){const face=isOwn||card.revealed||review;const editing=!face&&selected===card.id&&canGuess();const marked=!card.revealed&&card.misses.length>0;const el=document.createElement(editing?'form':'button');if(!editing)el.type='button';el.className='card '+(card.revealed?'known':face?'own':'back')+(selected===card.id&&!isOwn?' selected':'')+(marked?' missed':'');if(!editing)el.disabled=isOwn||card.revealed||!canGuess()||review;
+   el.setAttribute('aria-label',face?'数字'+card.n+(card.revealed?'，已猜中':'，背面提示'+card.factor):title.textContent+'列，提示'+card.factor+'，从下第'+(list.children.length+1)+'张');
+   if(marked){const note='这张牌猜错过：'+card.misses.join('、');el.title=note;el.setAttribute('aria-label',el.getAttribute('aria-label')+'，'+note);}
+   if(editing){
+    el.className='card editor selected';el.removeAttribute('aria-label');el.id='guessForm';
+    const label=document.createElement('span');label.className='editor-label';label.textContent=(card.factor==='X'?'提示 ':'因数 ')+card.factor+(marked?' · 猜过':'');el.append(label);
+    const row=document.createElement('div');row.className='editor-row';
+    const input=document.createElement('input');input.id='guessInput';input.type='number';input.inputMode='numeric';input.min=state.config.min;input.max=state.config.max;input.step=1;input.placeholder='?';input.autocomplete='off';input.setAttribute('aria-label','猜测的数字');input.value=draft;input.oninput=()=>{draft=input.value;};row.append(input);
+    const controls=document.createElement('div');controls.className='editor-controls';
+    const confirm=document.createElement('button');confirm.type='submit';confirm.className='confirm-guess';confirm.textContent='✓';confirm.setAttribute('aria-label','确认猜牌');controls.append(confirm);
+    const cancel=document.createElement('button');cancel.type='button';cancel.className='cancel-guess';cancel.textContent='×';cancel.setAttribute('aria-label','取消猜牌');cancel.onclick=cancelGuess;controls.append(cancel);row.append(controls);el.append(row);
+    el.onsubmit=e=>{e.preventDefault();submitGuess();};input.onkeydown=e=>{if(e.key==='Escape'){e.stopPropagation();cancelGuess();}};
+    list.append(el);continue;
+   }
+   const value=document.createElement('span');value.className='value';value.textContent=face?card.n:card.factor;el.append(value);const small=document.createElement('span');small.className='small';small.textContent=card.revealed?'已猜中':face?(card.factor==='X'?'背面 X':'背面 × '+card.factor):(card.factor==='X'?'口诀外数字':'因数线索');el.append(small);if(marked){const badge=document.createElement('span');badge.className='miss-badge';badge.textContent='猜错';el.append(badge);const last=document.createElement('span');last.className='miss-value';last.textContent='≠ '+(card.lastMiss??card.misses.at(-1));el.append(last);}if(card.revealed){const check=document.createElement('span');check.className='check';check.textContent='✓';el.append(check);}if(!face){el.onclick=()=>{selected=card.id;draft='';hints=false;render();$('guessInput').focus();};}list.append(el);}
+  if(!cards.length){const empty=document.createElement('span');empty.className='empty';empty.textContent='暂无牌';list.append(empty);}section.append(list);root.append(section);
+ }
+}
+function render(){
+ if(!state)return;
+ $('gameArea').hidden=gate;
+ $('gateOverlay').hidden=!gate;
+ if(gate){$('gateTitle').textContent='把设备交给'+name(state.turn);$('opponentBoard').replaceChildren();$('ownBoard').replaceChildren();$('readyBtn').focus();return;}
+ const me=viewer(),other=1-me,done=state.winner!==null;
+ $('heroTitle').textContent=done?(name(state.winner)+'赢了这场探险！'):state.turn===me?'轮到你，猜一个数字。':'电脑正在寻找线索…';
+ $('heroText').textContent=done?'每一次推理，都是一次小小的进步。':'看范围、位置和提示，找出对方的数字。';
+ $('turnPill').textContent=done?'对局结束':'第 '+(state.moves+1)+' 手 · '+name(state.turn);
+ $('opponentName').textContent=name(other)+'的牌';$('ownName').textContent=state.config.mode==='ai'?'我的牌':name(me)+'的牌';
+ for(const [i,id]of [[me,'ownCount'],[other,'opponentCount']]){const p=state.players[i],remaining=p.table.filter(c=>!c.revealed).length;$(id).innerHTML='<b>'+remaining+'</b> 张未猜中';}
+ $('deckCount').textContent='公共牌堆 · 剩余 '+state.deck.length+' 张 · 两人共用';
+ board('opponentBoard',other,false);board('ownBoard',me,true);
+ const card=activeCard();$('missesNote').hidden=!card?.misses.length;$('missesNote').textContent=card?.misses.length?'这张牌猜错过：'+card.misses.join('、'):'';$('inlineHints').hidden=!canGuess()||!card;$('hintBtn').disabled=!canGuess()||!card;
+ $('feedback').textContent=state.message;
+ $('hintBtn').textContent=hints?'收起推理提示':'💡 看看可能的数字';$('hintArea').hidden=!hints||!card;$('candidates').replaceChildren();
+ if(hints&&card){for(const n of Game.candidates(state,me,card)){const button=document.createElement('button');button.className='candidate';button.textContent=n;button.onclick=()=>{draft=String(n);$('guessInput').value=draft;$('guessInput').focus();};$('candidates').append(button);}}
+ $('modeChip').textContent=state.config.mode==='local'?'双人':'人机';$('log').replaceChildren();
+ if(!state.history.length){const p=document.createElement('p');p.textContent='数字探险开始了，第一条线索等你来发现。';$('log').append(p);}
+ for(const e of state.history.slice(0,50)){const p=document.createElement('p');p.textContent=e.round+'. '+name(e.actor)+'猜 '+e.value+(e.correct?'，猜对了 ✓':'，没猜中。'+(e.added?'对方从公共牌堆抽 '+e.added+' 张牌。':'公共牌堆已经抽完。'));$('log').append(p);}
+ if(!done)scheduleAI();
+}
+function applyGuess(actor,id,value){
+ try{const e=Game.guess(state,actor,id,value);selected=null;draft='';hints=false;state.message=e.correct?name(actor)+'猜对了 '+value+'！这张牌翻开留桌。':name(actor)+'猜 '+value+' 没猜中。'+(e.added?'对方从公共牌堆抽出 '+e.added+' 张，并按大小插入。':'公共牌堆已经抽完。');save();
+  if(state.winner!==null){render();$('winnerTitle').textContent=name(state.winner)+'赢了！';$('winnerText').textContent='用了 '+state.moves+' 手，'+name(state.winner)+'先猜完了对方桌上所有牌。';$('winnerOverlay').hidden=false;$('reviewBtn').focus();}
+  else{gate=state.config.mode==='local';render();}
+ }catch(e){$('feedback').textContent=e.message;}
+}
+function scheduleAI(){if(aiTimer||!state||state.config.mode!=='ai'||state.turn!==1||state.winner!==null)return;aiTimer=setTimeout(()=>{aiTimer=null;if($('settingsOverlay').hidden===false||$('rulesOverlay').hidden===false){scheduleAI();return;}const move=Game.aiMove(state);applyGuess(1,move.id,move.value);},1200);}
+function submitGuess(){if(!canGuess()||!activeCard())return;const raw=$('guessInput').value.trim();if(!raw){$('feedback').textContent='先输入你猜的数字吧。';$('guessInput').focus();return;}applyGuess(viewer(),selected,Number(raw));}
+function cancelGuess(){selected=null;draft='';hints=false;render();$('opponentBoard').querySelector('button:not(:disabled)')?.focus();}
+$('hintBtn').onclick=()=>{hints=!hints;render();};$('settingsBtn').onclick=openSettings;$('closeSettings').onclick=()=>hideOverlay('settingsOverlay');$('startBtn').onclick=start;
+$('rulesBtn').onclick=()=>{$('rulesOverlay').hidden=false;$('understood').focus();};$('closeRules').onclick=$('understood').onclick=()=>hideOverlay('rulesOverlay');
+$('readyBtn').onclick=()=>{gate=false;render();};$('reviewBtn').onclick=()=>{hideOverlay('winnerOverlay');review=true;render();};$('againBtn').onclick=()=>{hideOverlay('winnerOverlay');openSettings();};
+$('mode').onchange=()=>{$('difficulty').disabled=$('mode').value==='local';};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideOverlay('rulesOverlay');if(state)hideOverlay('settingsOverlay');}if(e.key==='Tab'){const overlay=[...document.querySelectorAll('.overlay')].find(el=>!el.hidden);if(!overlay)return;const focusable=[...overlay.querySelectorAll('button,input,select')].filter(el=>!el.hidden&&!el.disabled);const first=focusable[0],last=focusable.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+load();if(state){gate=state.config.mode==='local'&&state.winner===null;render();}else openSettings();
+})();
+</script>
+</body>
+</html>

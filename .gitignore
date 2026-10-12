@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+*.tar.gz
+*.zip
+.openai/
+work/
+outputs/
+*.log
