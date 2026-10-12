@@ -47,8 +47,28 @@ node check-game.cjs
 
 测试覆盖400局确定性对局，以及公共牌堆守恒、排序插入、位置与X推理、牌堆耗尽、旧存档迁移和电脑的暗牌独立性。另有5000组固定种子的均匀与调整权重对照，检查频率只作轻微下降。页面交互改动还需要在浏览器中检查。
 
-## 发布
+## 发布与代码同步
 
-GitHub仓库用于源码维护。现有在线游戏由Sites托管，向GitHub提交代码不会自动更新网站；修改后需要另行发布到Sites。
+GitHub Pages工作流位于 `.github/workflows/pages.yml`。
+
+- 每次推送到 `main`，自动执行规则测试和随机权重测试，全部通过后直接发布该提交的 `dist/`。
+- Pull request只运行测试，合并到 `main` 后自动发布。
+- 发布使用同一份 `dist/index.html`，无需复制源码到另一个发布目录。
+- 可以在仓库Actions页面手动运行 `Test and deploy GitHub Pages`。
+- 发布产物中的 `version.json` 记录本次发布的提交SHA，可用于确认网页与源码是否一致。
+
+### 首次启用
+
+1. 打开仓库 **Settings → Pages**。
+2. 在 **Build and deployment → Source** 中选择 **GitHub Actions**。
+3. 在 **Actions → Test and deploy GitHub Pages** 手动运行一次；后续 `main` 更新会自动触发。
+
+Pages启用并发布成功后的默认地址为：
+
+<https://houde0820.github.io/-jiujiu-card-detective/>
+
+GitHub Free支持公开仓库的Pages；私有仓库需要GitHub Pro或其他支持私有Pages的付费方案。保留私有仓库时，先确认账号支持Pages。
+
+原Sites网址仍可使用，Sites需要另行发布。GitHub Pages预览由上述工作流自动跟随GitHub源码更新。
 
 仓库不包含发布压缩包、账户凭证或玩家存档。
