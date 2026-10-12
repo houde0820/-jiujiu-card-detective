@@ -61,3 +61,18 @@ for(const min of [0,1])for(const factorMode of ['random','all'])for(let seed=1;s
  assert.notEqual(s.winner,null);assert(s.players[1-s.winner].table.every(c=>c.revealed));assert.throws(()=>Game.guess(s,s.turn,s.players[1-s.turn].table[0].id,1));games++;moves+=s.moves;
 }
 console.log('PASS: '+games+' seeded games, '+moves+' moves; shared deck conservation, sorted insertion, visible position and X deductions, valid 1-to-9 products, exhaustion, legacy migration and AI hidden-card independence.');
+
+const distribution={baseline:{high:0,two:0,eligible:0},adjusted:{high:0,two:0,eligible:0}};
+for(let seed=1;seed<=5000;seed++)for(const kind of ['baseline','adjusted']){
+ const config=kind==='baseline'?{highRangeWeight:1,factorTwoWeight:1}:{};
+ const game=Game.create(config,seeded(seed));const opened=game.players.flatMap(p=>p.table),all=[...opened,...game.deck];
+ distribution[kind].high+=opened.filter(c=>c.n>=30).length;
+ for(const c of all){const factors=[];for(let f=2;f<=9;f++)if(c.n%f===0&&c.n/f>=1&&c.n/f<=9)factors.push(f);
+  if(factors.includes(2)&&factors.length>1){distribution[kind].eligible++;if(c.factor===2)distribution[kind].two++;}
+  if(c.n===2)assert.equal(c.factor,2,'A sole legal factor must remain available');
+ }
+}
+assert(distribution.adjusted.high<distribution.baseline.high);assert(distribution.adjusted.high>distribution.baseline.high*.8,'High cards should only be mildly reduced');
+assert(distribution.adjusted.two<distribution.baseline.two);assert(distribution.adjusted.two>distribution.baseline.two*.8,'Factor 2 should only be mildly reduced');
+for(const [kind,c]of Object.entries(distribution))console.log(kind+': opening 30-39 '+(100*c.high/40000).toFixed(2)+'%; factor 2 among eligible multi-factor cards '+(100*c.two/c.eligible).toFixed(2)+'%');
+console.log('PASS: 5000 paired seeded distributions; mild reductions with all cards and sole factor clues preserved.');
