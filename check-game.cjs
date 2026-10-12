@@ -15,10 +15,13 @@ const boundaries={config:{min:1,max:39},players:[{table:[]},{table:[card(12,2),c
 assert.deepEqual(plain(Game.candidates(boundaries,0,boundaries.players[1].table[0])),[10,12]);
 assert.deepEqual(plain(Game.candidates(boundaries,0,boundaries.players[1].table[2])),[16,18]);
 const legacy=Game.create({},seeded(50));
+// A saved four-card opening must retain its cards when loaded after the rule change.
+for(const p of legacy.players)legacy.deck.push(p.table.pop());
 legacy.version=1;const originalDeck=numbers(legacy.deck);legacy.players[0].reserve=legacy.deck.slice(0,10);legacy.players[1].reserve=legacy.deck.slice(10);delete legacy.deck;
 legacy.players.forEach(p=>p.table.reverse());
 const migrated=Game.migrate(legacy,seeded(42));
 assert.equal(migrated.version,3);assert.equal(migrated.deck.length,31);assert(!('reserve' in migrated.players[0]));
+assert(migrated.players.every(p=>p.table.length===4));
 assert.deepEqual(numbers(migrated.deck).sort((a,b)=>a-b),originalDeck.sort((a,b)=>a-b));
 const exhausted=Game.create({},seeded(15));exhausted.deck=exhausted.deck.slice(0,1);
 for(const expected of [1,0]){const actor=exhausted.turn,c=exhausted.players[1-actor].table.find(c=>!c.revealed);assert.equal(Game.guess(exhausted,actor,c.id,c.n===39?38:c.n+1).added,expected);assert.equal(exhausted.deck.length,0);}
@@ -37,7 +40,7 @@ let games=0,moves=0;
 for(const min of [0,1])for(const factorMode of ['random','all'])for(let seed=1;seed<=100;seed++){
  const rng=seeded(seed),s=Game.create({min,factorMode},rng);
  const allCards=()=>[...s.deck,...s.players.flatMap(p=>p.table)];
- assert.equal(s.deck.length,32-min);assert.equal(s.players[0].table.length,4);assert.equal(s.players[1].table.length,4);
+ assert.equal(s.deck.length,30-min);assert.equal(s.players[0].table.length,5);assert.equal(s.players[1].table.length,5);
  for(const c of allCards()){
   const legal=[];for(let a=1;a<=9;a++)for(let b=1;b<=9;b++)if(a*b===c.n)legal.push(a);
   if(!legal.length)assert.equal(c.factor,'X');else assert(legal.includes(c.factor));
@@ -64,7 +67,7 @@ console.log('PASS: '+games+' seeded games, '+moves+' moves; shared deck conserva
 
 const distribution={baseline:{high:0,two:0,eligible:0},adjusted:{high:0,two:0,eligible:0}};
 for(let seed=1;seed<=5000;seed++)for(const kind of ['baseline','adjusted']){
- const config=kind==='baseline'?{highRangeWeight:1,factorTwoWeight:1}:{};
+ const config=kind==='baseline'?{highRangeWeight:1,factorTwoWeight:1,xCardWeight:1}:{xCardWeight:1};
  const game=Game.create(config,seeded(seed));const opened=game.players.flatMap(p=>p.table),all=[...opened,...game.deck];
  distribution[kind].high+=opened.filter(c=>c.n>=30).length;
  for(const c of all){const factors=[];for(let f=2;f<=9;f++)if(c.n%f===0&&c.n/f>=1&&c.n/f<=9)factors.push(f);
@@ -74,5 +77,18 @@ for(let seed=1;seed<=5000;seed++)for(const kind of ['baseline','adjusted']){
 }
 assert(distribution.adjusted.high<distribution.baseline.high);assert(distribution.adjusted.high>distribution.baseline.high*.8,'High cards should only be mildly reduced');
 assert(distribution.adjusted.two<distribution.baseline.two);assert(distribution.adjusted.two>distribution.baseline.two*.8,'Factor 2 should only be mildly reduced');
-for(const [kind,c]of Object.entries(distribution))console.log(kind+': opening 30-39 '+(100*c.high/40000).toFixed(2)+'%; factor 2 among eligible multi-factor cards '+(100*c.two/c.eligible).toFixed(2)+'%');
+for(const [kind,c]of Object.entries(distribution))console.log(kind+': opening 30-39 '+(100*c.high/50000).toFixed(2)+'%; factor 2 among eligible multi-factor cards '+(100*c.two/c.eligible).toFixed(2)+'%');
 console.log('PASS: 5000 paired seeded distributions; mild reductions with all cards and sole factor clues preserved.');
+
+const xDistribution={baseline:0,adjusted:0};
+for(let seed=1;seed<=5000;seed++)for(const kind of ['baseline','adjusted']){
+ const game=Game.create({xCardWeight:kind==='baseline'?1:0.85},seeded(seed));
+ const opened=game.players.flatMap(p=>p.table),all=[...opened,...game.deck];
+ xDistribution[kind]+=opened.filter(c=>c.factor==='X').length;
+ assert.equal(all.filter(c=>c.factor==='X').length,14,'Weighting must preserve every X card in the full deck');
+ assert.equal(new Set(all.map(c=>c.n)).size,39);
+}
+assert(xDistribution.adjusted<xDistribution.baseline);
+assert(xDistribution.adjusted>xDistribution.baseline*.8,'X cards should only be mildly reduced');
+for(const [kind,count]of Object.entries(xDistribution))console.log(kind+': opening X '+(100*count/50000).toFixed(2)+'%');
+console.log('PASS: 5000 paired seeded X distributions; mild reduction with all 39 cards preserved.');
