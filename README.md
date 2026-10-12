@@ -2,7 +2,7 @@
 
 按课堂玩法制作的家庭猜牌游戏，支持与电脑对战，以及两人共用一台设备轮流玩。
 
-[在线游戏](https://jiujiu-card-detective.depeng.chatgpt.site)
+[GitHub Pages在线游戏](https://houde0820.github.io/-jiujiu-card-detective/)
 
 ## 运行
 
@@ -63,7 +63,7 @@ GitHub Pages工作流位于 `.github/workflows/pages.yml`。
 2. 在 **Build and deployment → Source** 中选择 **GitHub Actions**。
 3. 在 **Actions → Test and deploy GitHub Pages** 手动运行一次；后续 `main` 更新会自动触发。
 
-Pages启用并发布成功后的默认地址为：
+GitHub Pages在线预览地址：
 
 <https://houde0820.github.io/-jiujiu-card-detective/>
 
