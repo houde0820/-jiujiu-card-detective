@@ -37,15 +37,15 @@ xPosition.players[1].table[1].revealed=true;
 assert.deepEqual(plain(Game.candidates(xPosition,0,xPosition.players[1].table[0])),[11]);
 const zero={config:{min:0,max:39},players:[{table:[]},{table:[card(0,'X')]}]};assert.deepEqual(plain(Game.candidates(zero,0,zero.players[1].table[0])),[0]);
 let games=0,moves=0;
-for(const min of [0,1])for(const factorMode of ['random','all'])for(let seed=1;seed<=100;seed++){
- const rng=seeded(seed),s=Game.create({min,factorMode},rng);
+for(const {min,max}of [{min:0,max:39},{min:1,max:39},{min:1,max:49}])for(const initialCards of [4,5,6])for(const factorMode of ['random','all'])for(let seed=1;seed<=100;seed++){
+ const rng=seeded(seed),s=Game.create({min,max,initialCards,factorMode},rng);
  const allCards=()=>[...s.deck,...s.players.flatMap(p=>p.table)];
- assert.equal(s.deck.length,30-min);assert.equal(s.players[0].table.length,5);assert.equal(s.players[1].table.length,5);
+ assert.equal(s.deck.length,max-min+1-initialCards*2);assert.equal(s.players[0].table.length,initialCards);assert.equal(s.players[1].table.length,initialCards);
  for(const c of allCards()){
   const legal=[];for(let a=1;a<=9;a++)for(let b=1;b<=9;b++)if(a*b===c.n)legal.push(a);
   if(!legal.length)assert.equal(c.factor,'X');else assert(legal.includes(c.factor));
  }
- assert.throws(()=>Game.guess(s,1,s.players[0].table[0].id,1));assert.throws(()=>Game.guess(s,0,s.players[1].table[0].id,40));
+ assert.throws(()=>Game.guess(s,1,s.players[0].table[0].id,1));assert.throws(()=>Game.guess(s,0,s.players[1].table[0].id,max+1));
  while(s.winner===null&&s.moves<500){
   const actor=s.turn,defender=s.players[1-actor],unknown=defender.table.filter(c=>!c.revealed),c=unknown[Math.floor(rng()*unknown.length)],values=Game.candidates(s,actor,c);
   assert(values.includes(c.n),'Visible position constraints must preserve the true answer');
@@ -53,7 +53,7 @@ for(const min of [0,1])for(const factorMode of ['random','all'])for(let seed=1;s
   assert.equal(s.deck.length,deckSize-(e.correct?0:Math.min(2,deckSize)));assert.equal(defender.table.length,before+(e.correct?0:Math.min(2,deckSize)));
   if(e.correct)assert(c.revealed);else assert(c.misses.includes(value));
   for(const p of s.players)assert.deepEqual(plain(numbers(p.table)),plain([...numbers(p.table)].sort((a,b)=>a-b)));
-  assert.equal(allCards().length,40-min);assert.equal(new Set(allCards().map(c=>c.n)).size,40-min);
+  assert.equal(allCards().length,max-min+1);assert.equal(new Set(allCards().map(c=>c.n)).size,max-min+1);
   if(s.winner===null)assert.equal(s.turn,1-actor);
   if(s.turn===1&&s.winner===null){
    const ai=Game.aiMove(s,rng),target=s.players[0].table.find(c=>c.id===ai.id);assert(Game.candidates(s,1,target).includes(ai.value));
@@ -122,3 +122,15 @@ for(let i=0;i<2;i++){
 const savedOpening=Game.create({},seeded(777));delete savedOpening.config.openingFiveToNineWeight;delete savedOpening.config.openingXWeight;
 const savedCopy=plain(savedOpening);assert.deepEqual(plain(Game.migrate(savedOpening)),savedCopy,'Existing games must not be redealt');
 console.log('PASS: 5000 paired opening distributions; mild 5-9 and X reductions for both players, unchanged clues and saved games.');
+
+for(const initialCards of [3,7,4.5,NaN])assert.throws(()=>Game.create({initialCards}));
+const oldCount=Game.create({},seeded(12));delete oldCount.config.initialCards;
+const oldCountCopy=plain(oldCount);assert.deepEqual(plain(Game.migrate(oldCount)),oldCountCopy,'Old five-card games must resume unchanged');
+const fortyLane={config:{min:1,max:49},players:[{table:[]},{table:[card(40,5),card(42,6),card(49,7)]}]};
+assert.deepEqual(plain(Game.candidates(fortyLane,0,fortyLane.players[1].table[0])),[40,45]);
+assert.deepEqual(plain(Game.candidates(fortyLane,0,fortyLane.players[1].table[1])),[42,48]);
+assert.deepEqual(plain(Game.candidates(fortyLane,0,fortyLane.players[1].table[2])),[49]);
+const outsideForty={config:{min:1,max:49},players:[{table:[]},{table:[card(41,'X'),card(47,'X')]}]};
+assert.deepEqual(plain(Game.candidates(outsideForty,0,outsideForty.players[1].table[0])),[41,43,44,46]);
+assert.deepEqual(plain(Game.candidates(outsideForty,0,outsideForty.players[1].table[1])),[43,44,46,47]);
+console.log('PASS: 4-6 opening cards, 1-49 clues and deductions, invalid count rejection and unchanged legacy hands.');
