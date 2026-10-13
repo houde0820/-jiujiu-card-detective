@@ -182,12 +182,35 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
  .columns[data-columns="5"] .miss-badge{font-size:6px;padding:2px;right:1px}
  .columns[data-columns="5"] .miss-value{font-size:8px;padding:2px 3px}
 }
+
+/* Brand, live status, round and Settings share one row above the board. */
+.gamebar{flex-wrap:nowrap;gap:14px;margin-bottom:18px}
+.gamebar .brand{flex-shrink:0;white-space:nowrap}
+.gamebar .hero{flex:1;min-width:0;margin:0;min-height:58px;padding:10px 18px;gap:12px}
+.gamebar .hero h2{min-width:0;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gamebar .turnpill{padding:7px 10px;font-size:11px}
+.gamebar .tools{flex-shrink:0;width:auto;display:flex}
+@media(max-width:760px){
+ .gamebar{gap:9px;margin-bottom:14px}
+ .gamebar .brand{gap:8px}.gamebar h1{font-size:16px}
+ .gamebar .brandmark{width:32px;height:32px;font-size:23px}
+ .gamebar .hero{padding:8px 10px;min-height:50px;gap:8px}
+ .gamebar .hero h2{font-size:14px}.gamebar .hero:before{display:none}
+ .gamebar .turnpill{padding:6px 7px;font-size:10px}.gamebar .turnactor{display:none}
+}
+@media(max-width:420px){
+ .gamebar{gap:6px;margin-bottom:12px}.gamebar .brandmark{display:none}
+ .gamebar h1{font-size:12px;letter-spacing:0}
+ .gamebar .hero{padding:8px 6px;min-height:44px;gap:5px}
+ .gamebar .hero h2{font-size:11px}
+ .gamebar .turnpill{padding:4px 5px;font-size:9px;border-width:1px;border-radius:8px;box-shadow:0 2px 0 var(--primary-dark)}
+ .gamebar .ghost{padding:8px 7px;font-size:10px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="brand"><div class="brandmark" aria-hidden="true">×</div><h1>九九乘法牌</h1></div><div class="tools"><button class="ghost" id="settingsBtn">设置</button></div></header>
-<section class="hero"><h2 id="heroTitle">每一张牌，都藏着线索。</h2><div class="turnpill" id="turnPill">准备开始</div></section>
+<header class="gamebar"><div class="brand"><div class="brandmark" aria-hidden="true">×</div><h1>九九乘法牌</h1></div><section class="hero" aria-label="对局状态"><h2 id="heroTitle">每一张牌，都藏着线索。</h2><div class="turnpill" id="turnPill"><span id="turnNumber">准备开始</span><span class="turnactor" id="turnActor"></span></div></section><div class="tools"><button class="ghost" id="settingsBtn">设置</button></div></header>
 <main class="layout" id="gameArea">
 <div><section class="panel" aria-label="对方的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">?</span><div><strong id="opponentName">电脑小侦探</strong></div></div><div id="feedback" class="feedback" aria-live="polite"></div><div class="counter" id="opponentCount"></div></div><div class="columns" id="opponentBoard"></div><div class="boardfooter"><div id="inlineHints" hidden><div class="misses-note" id="missesNote" hidden></div><button class="hintbtn" id="hintBtn">看看可能的数字</button><div id="hintArea" hidden><div class="candidates" id="candidates"></div></div></div></div></section><div class="between" id="deckCount">公共牌堆 · 两人共用</div><section class="panel" aria-label="自己的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">=</span><div><strong id="ownName">我的牌</strong></div></div><div class="counter" id="ownCount"></div></div><div class="columns" id="ownBoard"></div></section></div>
 
@@ -322,7 +345,7 @@ function render(){
  if(gate){$('gateTitle').textContent='把设备交给'+name(state.turn);$('opponentBoard').replaceChildren();$('ownBoard').replaceChildren();$('readyBtn').focus();return;}
  const me=viewer(),other=1-me,done=state.winner!==null;
  $('heroTitle').textContent=done?(name(state.winner)+'赢了这场探险！'):state.turn===me?'轮到你，猜一个数字。':'电脑正在寻找线索…';
- $('turnPill').textContent=done?'对局结束':'第 '+(state.moves+1)+' 手 · '+name(state.turn);
+ $('turnNumber').textContent=done?'对局结束':'第 '+(state.moves+1)+' 手';$('turnActor').textContent=done?'':' · '+name(state.turn);$('heroTitle').title=$('heroTitle').textContent;
  $('opponentName').textContent=name(other)+'的牌';$('ownName').textContent=state.config.mode==='ai'?'我的牌':name(me)+'的牌';
  for(const [i,id]of [[me,'ownCount'],[other,'opponentCount']]){const p=state.players[i],remaining=p.table.filter(c=>!c.revealed).length;$(id).innerHTML='<b>'+remaining+'</b> 张未猜中';}
  $('deckCount').textContent='公共牌堆 · '+state.deck.length+' 张';
