@@ -5,13 +5,13 @@ const Game=vm.runInNewContext(html.match(/<script id="gameEngine">([\s\S]*?)<\/s
 const seeded=seed=>()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296;};
 const numbers=a=>a.map(c=>c.n),plain=a=>JSON.parse(JSON.stringify(a));
 const card=(n,factor,revealed=false)=>({id:n,n,column:Math.floor(n/10),factor,revealed,misses:[]});
-const position={config:{min:1,max:39},players:[{table:[]},{table:[card(2,2),card(6,2),card(8,2)]}]};
+const position={config:{min:1,max:39,compactColumns:false},players:[{table:[]},{table:[card(2,2),card(6,2),card(8,2)]}]};
 assert.deepEqual(plain(Game.candidates(position,0,position.players[1].table[0])),[2,4]);
 assert.deepEqual(plain(Game.candidates(position,0,position.players[1].table[1])),[4,6]);
 assert.deepEqual(plain(Game.candidates(position,0,position.players[1].table[2])),[6,8]);
 position.players[1].table[1].revealed=true;
 assert.deepEqual(plain(Game.candidates(position,0,position.players[1].table[2])),[8]);
-const boundaries={config:{min:1,max:39},players:[{table:[]},{table:[card(12,2),card(14,2,true),card(18,2)]}]};
+const boundaries={config:{min:1,max:39,compactColumns:false},players:[{table:[]},{table:[card(12,2),card(14,2,true),card(18,2)]}]};
 assert.deepEqual(plain(Game.candidates(boundaries,0,boundaries.players[1].table[0])),[10,12]);
 assert.deepEqual(plain(Game.candidates(boundaries,0,boundaries.players[1].table[2])),[16,18]);
 const legacy=Game.create({},seeded(50));
@@ -30,12 +30,12 @@ for(const c of [...old2.deck,...old2.players.flatMap(p=>p.table)])c.factor=c.n==
 const fixed=Game.migrate(old2,seeded(52)),fixedCards=[...fixed.deck,...fixed.players.flatMap(p=>p.table)];
 for(const n of [11,13,17,19,22,23,26,29,31,33,34,37,38,39])assert.equal(fixedCards.find(c=>c.n===n).factor,'X');
 const eighteen=fixedCards.find(c=>c.n===18);assert([2,3,6,9].includes(eighteen.factor));
-const xPosition={config:{min:1,max:39},players:[{table:[card(13,'X')]},{table:[card(11,'X'),card(17,'X')]}]};
+const xPosition={config:{min:1,max:39,compactColumns:false},players:[{table:[card(13,'X')]},{table:[card(11,'X'),card(17,'X')]}]};
 assert.deepEqual(plain(Game.candidates(xPosition,0,xPosition.players[1].table[0])),[11,17]);
 assert.deepEqual(plain(Game.candidates(xPosition,0,xPosition.players[1].table[1])),[17,19]);
 xPosition.players[1].table[1].revealed=true;
 assert.deepEqual(plain(Game.candidates(xPosition,0,xPosition.players[1].table[0])),[11]);
-const zero={config:{min:0,max:39},players:[{table:[]},{table:[card(0,'X')]}]};assert.deepEqual(plain(Game.candidates(zero,0,zero.players[1].table[0])),[0]);
+const zero={config:{min:0,max:39,compactColumns:false},players:[{table:[]},{table:[card(0,'X')]}]};assert.deepEqual(plain(Game.candidates(zero,0,zero.players[1].table[0])),[0]);
 let games=0,moves=0;
 for(const {min,max}of [{min:0,max:39},{min:1,max:39},{min:1,max:49}])for(const initialCards of [4,5,6])for(const factorMode of ['random','all'])for(let seed=1;seed<=100;seed++){
  const rng=seeded(seed),s=Game.create({min,max,initialCards,factorMode},rng);
@@ -57,7 +57,7 @@ for(const {min,max}of [{min:0,max:39},{min:1,max:39},{min:1,max:49}])for(const i
   if(s.winner===null)assert.equal(s.turn,1-actor);
   if(s.turn===1&&s.winner===null){
    const ai=Game.aiMove(s,rng),target=s.players[0].table.find(c=>c.id===ai.id);assert(Game.candidates(s,1,target).includes(ai.value));
-   const clone=plain(s);for(const hidden of clone.players[0].table)if(!hidden.revealed)hidden.n=999;clone.deck.forEach(c=>c.n=999);
+   const clone=plain(s);for(const hidden of clone.players[0].table)if(!hidden.revealed)hidden.n=999;clone.deck.forEach(c=>c.n=999);clone.players[0].table.forEach(c=>c.column+=100);
    assert.deepEqual(plain(Game.aiMove(s,()=>.4)),plain(Game.aiMove(clone,()=>.4)),'AI must use visible order and clues, not hidden numbers or deck contents');
   }
  }
@@ -126,11 +126,55 @@ console.log('PASS: 5000 paired opening distributions; mild 5-9 and X reductions 
 for(const initialCards of [3,7,4.5,NaN])assert.throws(()=>Game.create({initialCards}));
 const oldCount=Game.create({},seeded(12));delete oldCount.config.initialCards;
 const oldCountCopy=plain(oldCount);assert.deepEqual(plain(Game.migrate(oldCount)),oldCountCopy,'Old five-card games must resume unchanged');
-const fortyLane={config:{min:1,max:49},players:[{table:[]},{table:[card(40,5),card(42,6),card(49,7)]}]};
+const fortyLane={config:{min:1,max:49,compactColumns:false},players:[{table:[]},{table:[card(40,5),card(42,6),card(49,7)]}]};
 assert.deepEqual(plain(Game.candidates(fortyLane,0,fortyLane.players[1].table[0])),[40,45]);
 assert.deepEqual(plain(Game.candidates(fortyLane,0,fortyLane.players[1].table[1])),[42,48]);
 assert.deepEqual(plain(Game.candidates(fortyLane,0,fortyLane.players[1].table[2])),[49]);
-const outsideForty={config:{min:1,max:49},players:[{table:[]},{table:[card(41,'X'),card(47,'X')]}]};
+const outsideForty={config:{min:1,max:49,compactColumns:false},players:[{table:[]},{table:[card(41,'X'),card(47,'X')]}]};
 assert.deepEqual(plain(Game.candidates(outsideForty,0,outsideForty.players[1].table[0])),[41,43,44,46]);
 assert.deepEqual(plain(Game.candidates(outsideForty,0,outsideForty.players[1].table[1])),[43,44,46,47]);
 console.log('PASS: 4-6 opening cards, 1-49 clues and deductions, invalid count rejection and unchanged legacy hands.');
+
+// Exhaustive small-puzzle oracle: assign numbers from clues, without reading hidden ranges.
+function exhaustiveSupports(s,viewer){
+ const table=s.players[1-viewer].table,known=new Set(s.players[viewer].table.map(c=>c.n));
+ for(const p of s.players)for(const c of p.table)if(c.revealed)known.add(c.n);
+ const products=new Set();for(let a=1;a<=9;a++)for(let b=1;b<=9;b++)products.add(a*b);
+ const domains=table.map(c=>{
+  if(c.revealed)return [c.n];
+  const values=[];for(let n=s.config.min;n<=s.config.max;n++)if(!known.has(n)&&!c.misses.includes(n)&&(c.factor==='X'?!products.has(n):products.has(n)&&n%c.factor===0&&n/c.factor<=9))values.push(n);
+  return values;
+ });
+ const supports=table.map(()=>new Set()),chosen=[];
+ function visit(i){
+  if(i===table.length){chosen.forEach((n,j)=>supports[j].add(n));return;}
+  for(const n of domains[i]){
+   if(i){const previous=chosen[i-1],same=table[i].column===table[i-1].column;
+    if(n<=previous||(same?Math.floor(n/10)!==Math.floor(previous/10):Math.floor(n/10)<=Math.floor(previous/10)))continue;
+   }
+   chosen[i]=n;visit(i+1);
+  }
+ }
+ visit(0);return supports.map(values=>[...values].sort((a,b)=>a-b));
+}
+const ambiguous={config:{min:1,max:39,compactColumns:true},players:[{table:[]},{table:[card(2,2),card(6,2),card(8,2)]}]};
+assert.deepEqual(plain(Game.candidates(ambiguous,0,ambiguous.players[1].table[0])),[2,4,10,12,14]);
+ambiguous.players[1].table[1].revealed=true;
+assert.deepEqual(plain(Game.candidates(ambiguous,0,ambiguous.players[1].table[0])),[2,4]);
+let oraclePuzzles=0;
+for(const max of [39,49])for(let seed=1;seed<=30;seed++){
+ const s=Game.create({max,initialCards:4},seeded(seed));s.players[1].table=s.players[1].table.slice(0,3);
+ if(seed%3===0)s.players[1].table[1].revealed=true;
+ for(const c of s.players[1].table)if(!c.revealed)c.misses=[c.n===s.config.max?s.config.min:c.n+1];
+ const expected=exhaustiveSupports(s,0);
+ s.players[1].table.forEach((c,i)=>assert.deepEqual(plain(Game.candidates(s,0,c)),expected[i],'Compressed-group deductions must match exhaustive visible assignments'));
+ const hidden=plain(s);hidden.players[1].table.forEach(c=>{if(!c.revealed)c.n=999;c.column+=100;});
+ hidden.players[1].table.forEach((c,i)=>assert.deepEqual(plain(Game.candidates(hidden,0,c)),expected[i],'True range IDs must not affect deductions'));
+ oraclePuzzles++;
+}
+const shifted=Game.create({initialCards:4},seeded(90));
+shifted.players[0].table=[card(30,5)];shifted.players[1].table=[card(2,2),card(24,3)];shifted.deck=[card(12,2),card(25,5)];
+const marked=shifted.players[1].table[1];Game.guess(shifted,0,marked.id,27);
+assert.deepEqual(plain(Game.groups(shifted.players[1].table).map(group=>numbers(group))),[[2],[12],[24,25]]);
+assert.deepEqual(plain(marked.misses),[27]);assert.equal(marked.lastMiss,27);
+console.log('PASS: '+oraclePuzzles+' exhaustive compressed-group puzzles, hidden-range independence, revealed anchors and marked-card insertion.');

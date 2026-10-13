@@ -34,7 +34,7 @@
 | `--ink` / `--muted` / `--page` / `--surface` | 正文、辅助文字、页面与面板 |
 | `--primary` / `--primary-dark` / `--primary-light` / `--on-primary` | 主要按钮、牌背、标题区、文字与厚度 |
 | `--accent` / `--accent-ink` | 当前轮次、提示纸、猜牌编辑器 |
-| `--lane-1` 到 `--lane-4`，含 `-ink` 与 `-soft` | 牌桌分区颜色；初级四列，中级在左侧增加40–49列，新增列复用第一组颜色 |
+| `--lane-1` 到 `--lane-4`，含 `-ink` 与 `-soft` | 可见列的区域配色，仅随显示位置变化，不表示真实数字范围；初级预留四个槽位，中级预留五个槽位，额外槽位复用第一组颜色 |
 | `--own-*` / `--success*` / `--miss-*` | 自己的牌、已猜中与猜错状态 |
 | `--line` / `--edge` / `--shade` / `--grid` / `--glow` | 边线、厚度、阴影和几何背景 |
 | `--radius-*` / `--font` / `--panel-shadow` / `--card-shadow` | 公共形状、字体和层次 |

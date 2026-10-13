@@ -163,7 +163,7 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
 .boardhead .feedback{flex:1 1 auto;min-width:0;margin:0 8px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);color:var(--ink);font-weight:700;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .boardhead .feedback:empty{display:none}
 :root[data-theme="garden"] .boardhead .feedback{background:var(--own-bg);border-color:var(--own-line);color:var(--wood-dark);box-shadow:0 2px 0 var(--wood-dark)}
-.col{padding-top:9px}
+.col{padding-top:9px}.col.empty-col{visibility:hidden;pointer-events:none}
 @media(max-width:760px){.boardhead{gap:8px}.boardhead .feedback{margin:0;padding:7px 9px;font-size:11px}.col{padding-top:7px}}
 @media(max-width:420px){.boardhead{gap:6px;padding:9px}.boardhead .player{max-width:85px;min-width:0}.boardhead .player>div{min-width:0}.boardhead .player strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}.boardhead .avatar{display:none}.boardhead .feedback{padding:6px;font-size:10px}.boardhead .counter{padding:4px 5px;font-size:8px}.boardhead .counter b{font-size:17px}}
 
@@ -193,7 +193,7 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
 
 </main>
 </div>
-<div class="overlay" id="settingsOverlay" hidden><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><button class="close" id="closeSettings" aria-label="关闭设置">×</button><h2 id="settingsTitle" tabindex="-1">设置</h2><div class="eyebrow">NUMBER PLAY LAB · 数字游乐场</div><label for="themePicker">主题皮肤</label><select id="themePicker" aria-label="选择配色主题"><option value="sky">晴空积木</option><option value="mint">薄荷积木</option><option value="berry">莓果积木</option><option value="garden">植物大战僵尸</option></select><label for="mode">和谁一起玩</label><select id="mode"><option value="ai">我和电脑</option><option value="local">两个人 · 同一台设备轮流玩</option></select><label for="difficulty">电脑思考方式</label><select id="difficulty"><option value="easy">轻松练习 · 随机选择线索</option><option value="smart">认真挑战 · 优先猜线索最明确的牌</option></select><label for="range">牌的范围</label><select id="range"><option value="1-39">初级 · 1–39 · 共39张</option><option value="1-49">中级 · 1–49 · 共49张</option><option value="0-39">0–39 · 共40张，放入公共牌堆</option></select><label for="initialCards">每人初始牌数</label><select id="initialCards"><option value="4">4张</option><option value="5" selected>5张 · 默认</option><option value="6">6张</option></select><label for="factorMode">牌背提示怎么分配</label><select id="factorMode"><option value="random">随机因数 · 优先使用2–9</option><option value="all">随机因数 · 从1–9中选择</option></select><p style="font-size:11px">口诀内数字随机提示一个因数，两个乘数均为1–9，例如18可以提示2、3、6或9。口诀外数字显示X，例如11、13、17、22、33、39；0也显示X。每局开始后提示保持不变。</p><details class="settings-section"><summary>玩法与推理说明</summary><ol class="rulelist"><li>所有牌洗匀，放入公共牌堆。两人各抽设置的4–6张牌（默认5张），按数字范围放入对应列。</li><li>各列从右向左依次是0–9、10–19、20–29、30–39；中级1–49增加最左侧的40–49列。每列从下到上由小到大排列。你看得到自己的数字，以及对方牌背的提示：口诀内是一个因数，口诀外显示X。</li><li>点选对方一张未翻开的牌，在牌上输入数字，点✓确认；点×取消。</li><li>猜对：翻开留在桌上。猜错：对方从公共牌堆抽2张，插入对应列的正确位置；不足2张就全抽出。猜错的牌带橙色标记，显示上次猜错的数字，补牌后标记仍跟着原牌。</li><li>无论猜对、猜错，都换另一人行动。</li><li>先猜完对方桌上所有牌的人获胜，公共牌堆里未抽出的牌不计入胜负。</li></ol><p><strong>举个例子：</strong>一张牌在10–19列，提示因数2，它可能是10、12、14、16、18。如果12在你桌上，就可以排除它；如果它排在已翻开的14上方，就只可能是16或18。</p><p>自己的牌数字朝向你，下方小字是对方看到的因数。提示按钮会结合牌的位置、背面提示，排除你桌上的数字、已翻开的数字和猜错过的数字。</p><p><strong>小侦探口诀：</strong>下小上大，右小左大。自己的牌也能帮你排除答案！</p><p>按课堂描述制作的家庭版。因数在开局时随机分配，对局自动保存在本机浏览器。电脑只使用桌上可见线索推理。</p></details><details class="settings-section"><summary>对局记录 <span class="mode-chip" id="modeChip"></span></summary><div id="log" class="log"></div></details><div class="actions"><button class="primary" id="startBtn">开始新对局 →</button></div><p id="savedNotice" style="font-size:11px" hidden>已有进行中的对局，关闭此窗口可以继续。</p></section></div>
+<div class="overlay" id="settingsOverlay" hidden><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><button class="close" id="closeSettings" aria-label="关闭设置">×</button><h2 id="settingsTitle" tabindex="-1">设置</h2><div class="eyebrow">NUMBER PLAY LAB · 数字游乐场</div><label for="themePicker">主题皮肤</label><select id="themePicker" aria-label="选择配色主题"><option value="sky">晴空积木</option><option value="mint">薄荷积木</option><option value="berry">莓果积木</option><option value="garden">植物大战僵尸</option></select><label for="mode">和谁一起玩</label><select id="mode"><option value="ai">我和电脑</option><option value="local">两个人 · 同一台设备轮流玩</option></select><label for="difficulty">电脑思考方式</label><select id="difficulty"><option value="easy">轻松练习 · 随机选择线索</option><option value="smart">认真挑战 · 优先猜线索最明确的牌</option></select><label for="range">牌的范围</label><select id="range"><option value="1-39">初级 · 1–39 · 共39张</option><option value="1-49">中级 · 1–49 · 共49张</option><option value="0-39">0–39 · 共40张，放入公共牌堆</option></select><label for="initialCards">每人初始牌数</label><select id="initialCards"><option value="4">4张</option><option value="5" selected>5张 · 默认</option><option value="6">6张</option></select><label for="columnLayout">列的摆放</label><select id="columnLayout"><option value="compact" selected>右对齐 · 推理隐藏的列范围</option><option value="fixed">固定位置 · 保留空列</option></select><label for="factorMode">牌背提示怎么分配</label><select id="factorMode"><option value="random">随机因数 · 优先使用2–9</option><option value="all">随机因数 · 从1–9中选择</option></select><p style="font-size:11px">口诀内数字随机提示一个因数，两个乘数均为1–9，例如18可以提示2、3、6或9。口诀外数字显示X，例如11、13、17、22、33、39；0也显示X。每局开始后提示保持不变。</p><details class="settings-section"><summary>玩法与推理说明</summary><ol class="rulelist"><li>所有牌洗匀，放入公共牌堆。两人各抽设置的4–6张牌（默认5张），按数字范围放入对应列。</li><li>同一数字范围的牌放在一列，每列从下到上递增；有牌的列从右向左由小到大。默认有牌的列靠右排列，空列不占位置，列属于哪个范围需要自己推理。例如0–9和20–29相邻时，补进10–19的牌会插入两列之间。中级增加40–49范围；设置里也可选固定位置保留空列。你看得到自己的数字，以及对方牌背的提示：口诀内是一个因数，口诀外显示X。</li><li>点选对方一张未翻开的牌，在牌上输入数字，点✓确认；点×取消。</li><li>猜对：翻开留在桌上。猜错：对方从公共牌堆抽2张，插入对应列的正确位置；不足2张就全抽出。猜错的牌带橙色标记，显示上次猜错的数字，补牌后标记仍跟着原牌。</li><li>无论猜对、猜错，都换另一人行动。</li><li>先猜完对方桌上所有牌的人获胜，公共牌堆里未抽出的牌不计入胜负。</li></ol><p><strong>举个例子：</strong>提示因数2的一张牌可能属于0–9或10–19范围；先结合其他列和已翻开的数字判断范围。确定在10–19后，它可能是10、12、14、16、18；如果12在你桌上可排除12，如果它在已翻开的14上方，就只可能是16或18。</p><p>自己的牌数字朝向你，下方小字是对方看到的因数。提示按钮与电脑会根据可见列分组、大小顺序和背面提示推理，不直接读取隐藏的列范围，并排除你桌上的数字、已翻开的数字和猜错过的数字。</p><p><strong>小侦探口诀：</strong>下小上大，右小左大。自己的牌也能帮你排除答案！</p><p>按课堂描述制作的家庭版。因数在开局时随机分配，对局自动保存在本机浏览器。电脑只使用桌上可见线索推理。</p></details><details class="settings-section"><summary>对局记录 <span class="mode-chip" id="modeChip"></span></summary><div id="log" class="log"></div></details><div class="actions"><button class="primary" id="startBtn">开始新对局 →</button></div><p id="savedNotice" style="font-size:11px" hidden>已有进行中的对局，关闭此窗口可以继续。</p></section></div>
 <div class="overlay" id="gateOverlay" hidden><section class="dialog gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle"><div class="bigemoji" aria-hidden="true">◇</div><h2 id="gateTitle">把设备交给玩家1</h2><p>另一位玩家先转过身。准备好后，再打开自己的牌。</p><button class="primary" id="readyBtn">准备好了，查看我的牌</button></section></div>
 <div class="overlay" id="winnerOverlay" hidden><section class="dialog gate" role="dialog" aria-modal="true" aria-labelledby="winnerTitle"><div class="bigemoji" aria-hidden="true">★</div><h2 id="winnerTitle">你赢了！</h2><p id="winnerText"></p><div class="actions"><button class="ghost" id="reviewBtn">看看桌上的牌</button><button class="primary" id="againBtn">再来一局</button></div></section></div>
 <script id="gameEngine">
@@ -207,7 +207,7 @@ const Game = (() => {
  const legalFactors=n=>Array.from({length:9},(_,i)=>i+1).filter(f=>n%f===0&&n/f>=1&&n/f<=9);
  function randomClue(n,config,rng){let factors=legalFactors(n);if(!factors.length)return 'X';if(config.factorMode==='random'&&factors.length>1)factors=factors.filter(f=>f!==1);return weightedPick(factors,f=>f===2&&factors.length>1?(config.factorTwoWeight??0.85):1,rng);}
  function create(options={},rng=Math.random){
-  const config={mode:'ai',difficulty:'easy',min:1,max:39,initialCards:5,factorMode:'random',highRangeWeight:0.85,factorTwoWeight:0.85,xCardWeight:0.85,openingFiveToNineWeight:0.85,openingXWeight:0.85,...options};
+  const config={mode:'ai',difficulty:'easy',min:1,max:39,initialCards:5,compactColumns:true,factorMode:'random',highRangeWeight:0.85,factorTwoWeight:0.85,xCardWeight:0.85,openingFiveToNineWeight:0.85,openingXWeight:0.85,...options};
   if(!Number.isInteger(config.initialCards)||config.initialCards<4||config.initialCards>6)throw Error('初始牌请选择4–6张。');
   const cards=[];
   for(let n=config.min;n<=config.max;n++)cards.push({id:n,n,column:Math.floor(n/10),factor:randomClue(n,config,rng),revealed:false,misses:[]});
@@ -224,23 +224,39 @@ const Game = (() => {
   }
   s.version=3;s.players.forEach(sortTable);return s;
  }
- function candidates(state,viewer,card){
+ // Groups and their order are visible; their true range is hidden when compacted.
+ function groups(table){const result=[];for(const card of table){if(!result.length||result.at(-1).at(-1).column!==card.column)result.push([]);result.at(-1).push(card);}return result;}
+ function candidateMap(state,viewer){
   const known=new Set(state.players[viewer].table.map(c=>c.n));
   for(const p of state.players)for(const c of p.table)if(c.revealed)known.add(c.n);
-  // Table order and column are public clues. Never sort by hidden answers here.
-  const column=state.players[1-viewer].table.filter(c=>c.column===card.column),at=column.indexOf(card);
-  if(at<0)return [];
-  const domains=column.map(c=>{
-   if(c.revealed)return [c.n];
-   const values=[];
-   for(let n=Math.max(state.config.min,c.column*10);n<=Math.min(state.config.max,c.column*10+9);n++)if((c.factor==='X'?!products.has(n):products.has(n)&&n%c.factor===0&&n/c.factor<=9)&&!known.has(n)&&!c.misses.includes(n))values.push(n);
-   return values;
+  const visible=groups(state.players[1-viewer].table),compact=state.config.compactColumns!==false;
+  const choices=visible.map(group=>{
+   const options=[];
+   for(let bin=Math.floor(state.config.min/10);bin<=Math.floor(state.config.max/10);bin++){
+    if(!compact&&bin!==group[0].column)continue;
+    const domains=group.map(c=>{
+     if(c.revealed)return Math.floor(c.n/10)===bin?[c.n]:[];
+     const values=[];
+     for(let n=Math.max(state.config.min,bin*10);n<=Math.min(state.config.max,bin*10+9);n++)if((c.factor==='X'?!products.has(n):products.has(n)&&n%c.factor===0&&n/c.factor<=9)&&!known.has(n)&&!c.misses.includes(n))values.push(n);
+     return values;
+    });
+    const forward=[],backward=[];
+    for(let i=0;i<domains.length;i++)forward[i]=domains[i].filter(n=>i===0||forward[i-1].some(p=>p<n));
+    for(let i=domains.length-1;i>=0;i--)backward[i]=domains[i].filter(n=>i===domains.length-1||backward[i+1].some(p=>p>n));
+    const supports=forward.map((values,i)=>values.filter(n=>backward[i].includes(n)));
+    if(supports.every(values=>values.length))options.push({bin,supports});
+   }
+   return options;
   });
+  // Assign strictly increasing ranges to the visible groups, allowing missing ranges.
   const forward=[],backward=[];
-  for(let i=0;i<domains.length;i++)forward[i]=domains[i].filter(n=>i===0||forward[i-1].some(p=>p<n));
-  for(let i=domains.length-1;i>=0;i--)backward[i]=domains[i].filter(n=>i===domains.length-1||backward[i+1].some(p=>p>n));
-  return forward[at].filter(n=>backward[at].includes(n));
+  for(let i=0;i<choices.length;i++)forward[i]=choices[i].filter(o=>i===0||forward[i-1].some(p=>p.bin<o.bin));
+  for(let i=choices.length-1;i>=0;i--)backward[i]=choices[i].filter(o=>i===choices.length-1||backward[i+1].some(p=>p.bin>o.bin));
+  const result=new Map();
+  visible.forEach((group,i)=>{const feasible=forward[i].filter(o=>backward[i].includes(o));group.forEach((card,j)=>result.set(card,[...new Set(feasible.flatMap(o=>o.supports[j]))].sort((a,b)=>a-b)));});
+  return result;
  }
+ function candidates(state,viewer,card){return candidateMap(state,viewer).get(card)??[];}
  function guess(state,actor,id,value){
   if(state.winner!==null||state.turn!==actor)throw Error('还没轮到你。');
   if(!Number.isInteger(value)||value<state.config.min||value>state.config.max)throw Error('请输入牌范围内的整数。');
@@ -254,11 +270,11 @@ const Game = (() => {
   return event;
  }
  function aiMove(state,rng=Math.random){
-  const options=state.players[0].table.filter(c=>!c.revealed).map(c=>({id:c.id,values:candidates(state,1,c)}));
+  const deductions=candidateMap(state,1),options=state.players[0].table.filter(c=>!c.revealed).map(c=>({id:c.id,values:deductions.get(c)}));
   const min=Math.min(...options.map(o=>o.values.length)),pool=state.config.difficulty==='smart'?options.filter(o=>o.values.length===min):options;
   const option=pool[rand(pool.length,rng)];return {id:option.id,value:option.values[rand(option.values.length,rng)]};
  }
- return {create,migrate,candidates,guess,aiMove};
+ return {create,migrate,candidates,guess,aiMove,groups};
 })();
 </script>
 <script>
@@ -273,14 +289,14 @@ function canGuess(){return state&&state.winner===null&&!gate&&(state.config.mode
 function activeCard(){return selected===null?null:state.players[1-viewer()].table.find(c=>c.id===selected&&!c.revealed);}
 function cancelAI(){clearTimeout(aiTimer);aiTimer=null;}
 function hideOverlay(id){$(id).hidden=true;}
-function syncSettings(){if(!state)return; $('mode').value=state.config.mode;$('difficulty').value=state.config.difficulty;$('range').value=state.config.min+'-'+state.config.max;$('factorMode').value=state.config.factorMode;$('initialCards').value=state.config.initialCards??5;$('difficulty').disabled=state.config.mode==='local';}
+function syncSettings(){if(!state)return; $('mode').value=state.config.mode;$('difficulty').value=state.config.difficulty;$('range').value=state.config.min+'-'+state.config.max;$('factorMode').value=state.config.factorMode;$('initialCards').value=state.config.initialCards??5;$('columnLayout').value=state.config.compactColumns===false?'fixed':'compact';$('difficulty').disabled=state.config.mode==='local';}
 function openSettings(){syncSettings();$('settingsOverlay').hidden=false;$('closeSettings').hidden=!state;$('savedNotice').hidden=!state;$('settingsTitle').focus({preventScroll:true});$('settingsOverlay').querySelector('.dialog').scrollTop=0;}
-function start(){cancelAI();const [min,max]=$('range').value.split('-').map(Number);state=Game.create({mode:$('mode').value,difficulty:$('difficulty').value,min,max,initialCards:Number($('initialCards').value),factorMode:$('factorMode').value});selected=null;draft='';hints=false;review=false;hideOverlay('settingsOverlay');hideOverlay('winnerOverlay');gate=state.config.mode==='local';save();render();}
+function start(){cancelAI();const [min,max]=$('range').value.split('-').map(Number);state=Game.create({mode:$('mode').value,difficulty:$('difficulty').value,min,max,initialCards:Number($('initialCards').value),compactColumns:$('columnLayout').value==='compact',factorMode:$('factorMode').value});selected=null;draft='';hints=false;review=false;hideOverlay('settingsOverlay');hideOverlay('winnerOverlay');gate=state.config.mode==='local';save();render();}
 function board(target,owner,isOwn){
- const root=$(target),lastColumn=Math.floor(state.config.max/10);root.replaceChildren();root.style.setProperty('--column-count',lastColumn+1);root.dataset.columns=lastColumn+1;
+ const root=$(target),lastColumn=Math.floor(state.config.max/10),compact=state.config.compactColumns!==false,visible=Game.groups(state.players[owner].table);root.replaceChildren();root.style.setProperty('--column-count',lastColumn+1);root.dataset.columns=lastColumn+1;
  for(let col=lastColumn;col>=0;col--){
   const section=document.createElement('div');section.className='col';const list=document.createElement('div');list.className='cards';
-  const cards=state.players[owner].table.filter(c=>c.column===col);
+  const cards=compact?(visible[col]??[]):state.players[owner].table.filter(c=>c.column===col);if(compact&&!cards.length){section.classList.add('empty-col');section.setAttribute('aria-hidden','true');}
   for(const card of cards){const face=isOwn||card.revealed||review;const editing=!face&&selected===card.id&&canGuess();const marked=!card.revealed&&card.misses.length>0;const el=document.createElement(editing?'form':'button');if(!editing)el.type='button';el.className='card '+(card.revealed?'known':face?'own':'back')+(selected===card.id&&!isOwn?' selected':'')+(marked?' missed':'');if(!editing)el.disabled=isOwn||card.revealed||!canGuess()||review;
    el.setAttribute('aria-label',face?'数字'+card.n+(card.revealed?'，已猜中':'，背面提示'+card.factor):'从右第'+(col+1)+'列，提示'+card.factor+'，从下第'+(list.children.length+1)+'张');
    if(marked){const note='这张牌猜错过：'+card.misses.join('、');el.title=note;el.setAttribute('aria-label',el.getAttribute('aria-label')+'，'+note);}
@@ -296,7 +312,7 @@ function board(target,owner,isOwn){
     list.append(el);continue;
    }
    const value=document.createElement('span');value.className='value';value.textContent=face?card.n:card.factor;el.append(value);const small=document.createElement('span');small.className='small';small.textContent=card.revealed?'已猜中':face?(card.factor==='X'?'背面 X':'背面 × '+card.factor):(card.factor==='X'?'口诀外数字':'因数线索');el.append(small);if(marked){const badge=document.createElement('span');badge.className='miss-badge';badge.textContent='猜错';el.append(badge);const last=document.createElement('span');last.className='miss-value';last.textContent='≠ '+(card.lastMiss??card.misses.at(-1));el.append(last);}if(card.revealed){const check=document.createElement('span');check.className='check';check.textContent='✓';el.append(check);}if(!face){el.onclick=()=>{selected=card.id;draft='';hints=false;render();$('guessInput').focus();};}list.append(el);}
-  if(!cards.length){const empty=document.createElement('span');empty.className='empty';empty.textContent='暂无牌';list.append(empty);}section.append(list);root.append(section);
+  if(!cards.length&&!compact){const empty=document.createElement('span');empty.className='empty';empty.textContent='暂无牌';list.append(empty);}section.append(list);root.append(section);
  }
 }
 function render(){
