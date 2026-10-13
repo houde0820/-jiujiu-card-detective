@@ -157,13 +157,15 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
 @media(max-width:760px){.wrap{padding-top:12px}header{flex-wrap:nowrap;gap:10px;margin-bottom:12px}.brand{gap:9px}.brandmark{width:35px;height:35px;font-size:26px;margin:0}h1{font-size:19px}.tools{display:flex;width:auto;flex-shrink:0}.hero{padding:12px 14px;gap:10px;flex-wrap:nowrap;min-height:62px;margin-bottom:15px}.hero h2{font-size:17px;line-height:1.4}.turnpill{font-size:10px;padding:7px 9px}.boardhead{padding:10px 12px}.columns{padding:9px;gap:7px}.between{padding:15px 0 12px}.cards{min-height:94px}.boardfooter{padding:9px 12px}.dialog{padding:22px 19px}.player strong{font-size:13px}}
 @media(max-width:350px){h1{font-size:17px}.hero{padding:10px}.hero h2{font-size:15px}.turnpill{padding:6px 7px;font-size:9px}.columns{gap:6px}.brandmark{width:31px;height:31px;font-size:23px}}
 
-/* Keep feedback beside the player name; lanes are inferred from position and cards. */
+/* One compact row for the player, feedback and remaining cards. */
+.boardhead{flex-wrap:nowrap}
 .boardhead .player,.boardhead .counter{flex-shrink:0}
-.boardhead .feedback{flex:1;min-width:0;margin:0 8px;line-height:1.5}
+.boardhead .feedback{flex:1 1 auto;min-width:0;margin:0 8px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-soft);color:var(--ink);font-weight:700;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .boardhead .feedback:empty{display:none}
-:root[data-theme="garden"] .boardhead .feedback{color:var(--wood-text)}
+:root[data-theme="garden"] .boardhead .feedback{background:var(--own-bg);border-color:var(--own-line);color:var(--wood-dark);box-shadow:0 2px 0 var(--wood-dark)}
 .col{padding-top:9px}
-@media(max-width:760px){.boardhead{flex-wrap:wrap;gap:8px}.boardhead .counter{margin-left:auto}.boardhead .feedback{order:3;flex-basis:100%;margin:0;font-size:11px}.col{padding-top:7px}}
+@media(max-width:760px){.boardhead{gap:8px}.boardhead .feedback{margin:0;padding:7px 9px;font-size:11px}.col{padding-top:7px}}
+@media(max-width:420px){.boardhead{gap:6px;padding:9px}.boardhead .player{max-width:85px;min-width:0}.boardhead .player>div{min-width:0}.boardhead .player strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}.boardhead .avatar{display:none}.boardhead .feedback{padding:6px;font-size:10px}.boardhead .counter{padding:4px 5px;font-size:8px}.boardhead .counter b{font-size:17px}}
 </style>
 </head>
 <body>
@@ -292,7 +294,7 @@ function render(){
  $('deckCount').textContent='公共牌堆 · '+state.deck.length+' 张';
  board('opponentBoard',other,false);board('ownBoard',me,true);
  const card=activeCard();$('missesNote').hidden=!card?.misses.length;$('missesNote').textContent=card?.misses.length?'这张牌猜错过：'+card.misses.join('、'):'';$('inlineHints').hidden=!canGuess()||!card;$('hintBtn').disabled=!canGuess()||!card;
- $('feedback').textContent=state.moves?state.message:'';$('inlineHints').closest('.boardfooter').hidden=$('inlineHints').hidden;
+ $('feedback').textContent=state.moves?state.message:'';$('feedback').title=$('feedback').textContent;$('inlineHints').closest('.boardfooter').hidden=$('inlineHints').hidden;
  $('hintBtn').textContent=hints?'收起推理提示':'看看可能的数字';$('hintArea').hidden=!hints||!card;$('candidates').replaceChildren();
  if(hints&&card){for(const n of Game.candidates(state,me,card)){const button=document.createElement('button');button.className='candidate';button.textContent=n;button.onclick=()=>{draft=String(n);$('guessInput').value=draft;$('guessInput').focus();};$('candidates').append(button);}}
  $('modeChip').textContent=state.config.mode==='local'?'双人':'人机';$('log').replaceChildren();
@@ -304,10 +306,10 @@ function applyGuess(actor,id,value){
  try{const e=Game.guess(state,actor,id,value);selected=null;draft='';hints=false;state.message=e.correct?name(actor)+'猜对了 '+value+'！这张牌翻开留桌。':name(actor)+'猜 '+value+' 没猜中。'+(e.added?'对方从公共牌堆抽出 '+e.added+' 张，并按大小插入。':'公共牌堆已经抽完。');save();
   if(state.winner!==null){render();$('winnerTitle').textContent=name(state.winner)+'赢了！';$('winnerText').textContent='用了 '+state.moves+' 手，'+name(state.winner)+'先猜完了对方桌上所有牌。';$('winnerOverlay').hidden=false;$('reviewBtn').focus();}
   else{gate=state.config.mode==='local';render();}
- }catch(e){$('feedback').textContent=e.message;}
+ }catch(e){$('feedback').textContent=e.message;$('feedback').title=e.message;}
 }
 function scheduleAI(){if(aiTimer||!state||state.config.mode!=='ai'||state.turn!==1||state.winner!==null)return;aiTimer=setTimeout(()=>{aiTimer=null;if($('settingsOverlay').hidden===false){scheduleAI();return;}const move=Game.aiMove(state);applyGuess(1,move.id,move.value);},1200);}
-function submitGuess(){if(!canGuess()||!activeCard())return;const raw=$('guessInput').value.trim();if(!raw){$('feedback').textContent='先输入你猜的数字吧。';$('guessInput').focus();return;}applyGuess(viewer(),selected,Number(raw));}
+function submitGuess(){if(!canGuess()||!activeCard())return;const raw=$('guessInput').value.trim();if(!raw){$('feedback').textContent='先输入你猜的数字吧。';$('feedback').title=$('feedback').textContent;$('guessInput').focus();return;}applyGuess(viewer(),selected,Number(raw));}
 function cancelGuess(){selected=null;draft='';hints=false;render();$('opponentBoard').querySelector('button:not(:disabled)')?.focus();}
 $('hintBtn').onclick=()=>{hints=!hints;render();};$('settingsBtn').onclick=openSettings;$('closeSettings').onclick=()=>hideOverlay('settingsOverlay');$('startBtn').onclick=start;
 $('readyBtn').onclick=()=>{gate=false;render();};$('reviewBtn').onclick=()=>{hideOverlay('winnerOverlay');review=true;render();};$('againBtn').onclick=()=>{hideOverlay('winnerOverlay');openSettings();};
