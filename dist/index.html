@@ -185,16 +185,17 @@ const Game = (() => {
  const rand=(n,rng)=>Math.min(n-1,Math.floor(rng()*n));
  const shuffled=(a,rng)=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=rand(i+1,rng);[b[i],b[j]]=[b[j],b[i]];}return b;};
  function weightedPick(values,weight,rng){let roll=rng()*values.reduce((sum,v)=>sum+weight(v),0);for(const v of values){roll-=weight(v);if(roll<0)return v;}return values.at(-1);}
- function weightedShuffle(values,weight,rng){const pool=[...values],result=[];while(pool.length){const chosen=weightedPick(pool,weight,rng);result.push(pool.splice(pool.indexOf(chosen),1)[0]);}return result;}
+ function weightedShuffle(values,weight,rng){const pool=[...values],result=[];while(pool.length){const chosen=weightedPick(pool,c=>weight(c,result.length),rng);result.push(pool.splice(pool.indexOf(chosen),1)[0]);}return result;}
  const sortTable=p=>p.table.sort((a,b)=>a.n-b.n);
  const products=new Set(Array.from({length:9},(_,i)=>i+1).flatMap(a=>Array.from({length:9},(_,i)=>a*(i+1))));
  const legalFactors=n=>Array.from({length:9},(_,i)=>i+1).filter(f=>n%f===0&&n/f>=1&&n/f<=9);
  function randomClue(n,config,rng){let factors=legalFactors(n);if(!factors.length)return 'X';if(config.factorMode==='random'&&factors.length>1)factors=factors.filter(f=>f!==1);return weightedPick(factors,f=>f===2&&factors.length>1?(config.factorTwoWeight??0.85):1,rng);}
  function create(options={},rng=Math.random){
-  const config={mode:'ai',difficulty:'easy',min:1,max:39,factorMode:'random',highRangeWeight:0.85,factorTwoWeight:0.85,xCardWeight:0.85,...options};
+  const config={mode:'ai',difficulty:'easy',min:1,max:39,factorMode:'random',highRangeWeight:0.85,factorTwoWeight:0.85,xCardWeight:0.85,openingFiveToNineWeight:0.85,openingXWeight:0.85,...options};
   const cards=[];
   for(let n=config.min;n<=config.max;n++)cards.push({id:n,n,column:Math.floor(n/10),factor:randomClue(n,config,rng),revealed:false,misses:[]});
-  const deck=weightedShuffle(cards,c=>(c.n>=30&&c.n<=39?config.highRangeWeight:1)*(c.factor==='X'?config.xCardWeight:1),rng),players=[{table:deck.splice(0,5)},{table:deck.splice(0,5)}];players.forEach(sortTable);
+  // Only the first ten draws receive the extra opening weights (five per player).
+  const deck=weightedShuffle(cards,(c,index)=>(c.n>=30&&c.n<=39?config.highRangeWeight:1)*(c.factor==='X'?config.xCardWeight:1)*(index<10?(c.n>=5&&c.n<=9?config.openingFiveToNineWeight:1)*(c.factor==='X'?config.openingXWeight:1):1),rng),players=[{table:deck.splice(0,5)},{table:deck.splice(0,5)}];players.forEach(sortTable);
   return {version:3,config,players,deck,turn:0,winner:null,moves:0,history:[],message:'从右向左看范围，再看每列里的大小顺序。'};
  }
  function migrate(s,rng=Math.random){

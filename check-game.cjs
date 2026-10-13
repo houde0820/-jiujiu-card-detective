@@ -68,7 +68,7 @@ console.log('PASS: '+games+' seeded games, '+moves+' moves; shared deck conserva
 const distribution={baseline:{high:0,two:0,eligible:0},adjusted:{high:0,two:0,eligible:0}};
 for(let seed=1;seed<=5000;seed++)for(const kind of ['baseline','adjusted']){
  const config=kind==='baseline'?{highRangeWeight:1,factorTwoWeight:1,xCardWeight:1}:{xCardWeight:1};
- const game=Game.create(config,seeded(seed));const opened=game.players.flatMap(p=>p.table),all=[...opened,...game.deck];
+ const game=Game.create({...config,openingFiveToNineWeight:1,openingXWeight:1},seeded(seed));const opened=game.players.flatMap(p=>p.table),all=[...opened,...game.deck];
  distribution[kind].high+=opened.filter(c=>c.n>=30).length;
  for(const c of all){const factors=[];for(let f=2;f<=9;f++)if(c.n%f===0&&c.n/f>=1&&c.n/f<=9)factors.push(f);
   if(factors.includes(2)&&factors.length>1){distribution[kind].eligible++;if(c.factor===2)distribution[kind].two++;}
@@ -82,7 +82,7 @@ console.log('PASS: 5000 paired seeded distributions; mild reductions with all ca
 
 const xDistribution={baseline:0,adjusted:0};
 for(let seed=1;seed<=5000;seed++)for(const kind of ['baseline','adjusted']){
- const game=Game.create({xCardWeight:kind==='baseline'?1:0.85},seeded(seed));
+ const game=Game.create({xCardWeight:kind==='baseline'?1:0.85,openingFiveToNineWeight:1,openingXWeight:1},seeded(seed));
  const opened=game.players.flatMap(p=>p.table),all=[...opened,...game.deck];
  xDistribution[kind]+=opened.filter(c=>c.factor==='X').length;
  assert.equal(all.filter(c=>c.factor==='X').length,14,'Weighting must preserve every X card in the full deck');
@@ -92,3 +92,33 @@ assert(xDistribution.adjusted<xDistribution.baseline);
 assert(xDistribution.adjusted>xDistribution.baseline*.8,'X cards should only be mildly reduced');
 for(const [kind,count]of Object.entries(xDistribution))console.log(kind+': opening X '+(100*count/50000).toFixed(2)+'%');
 console.log('PASS: 5000 paired seeded X distributions; mild reduction with all 39 cards preserved.');
+
+// Compare the new opening-only bias against the previous defaults, for each player.
+const openingDistribution={baseline:[{low:0,lowColumn:0,x:0},{low:0,lowColumn:0,x:0}],adjusted:[{low:0,lowColumn:0,x:0},{low:0,lowColumn:0,x:0}]};
+for(let seed=1;seed<=5000;seed++){
+ const baseline=Game.create({openingFiveToNineWeight:1,openingXWeight:1},seeded(seed));
+ const adjusted=Game.create({},seeded(seed));
+ const before=[...baseline.deck,...baseline.players.flatMap(p=>p.table)].sort((a,b)=>a.n-b.n);
+ const after=[...adjusted.deck,...adjusted.players.flatMap(p=>p.table)].sort((a,b)=>a.n-b.n);
+ assert.deepEqual(plain(after),plain(before),'Opening weights must preserve all numbers and their assigned clues');
+ assert.equal(adjusted.deck.length,29);
+ for(const [kind,game]of [['baseline',baseline],['adjusted',adjusted]])game.players.forEach((p,i)=>{
+  assert.equal(p.table.length,5);
+  const totals=openingDistribution[kind][i];
+  totals.low+=p.table.filter(c=>c.n>=5&&c.n<=9).length;
+  totals.lowColumn+=p.table.filter(c=>c.column===0).length;
+  totals.x+=p.table.filter(c=>c.factor==='X').length;
+ });
+}
+for(let i=0;i<2;i++){
+ const before=openingDistribution.baseline[i],after=openingDistribution.adjusted[i];
+ for(const metric of ['low','x']){
+  assert(after[metric]<before[metric],'Both players must receive fewer opening '+metric+' cards');
+  assert(after[metric]>before[metric]*.8,'Opening '+metric+' reduction must remain mild');
+ }
+ assert(after.low/after.lowColumn<before.low/before.lowColumn,'The 0-9 column must favor 1-4 slightly more');
+ for(const [kind,totals]of [['baseline',before],['adjusted',after]])console.log(kind+': player '+(i+1)+' opening 5-9 '+(100*totals.low/25000).toFixed(2)+'%; X '+(100*totals.x/25000).toFixed(2)+'%');
+}
+const savedOpening=Game.create({},seeded(777));delete savedOpening.config.openingFiveToNineWeight;delete savedOpening.config.openingXWeight;
+const savedCopy=plain(savedOpening);assert.deepEqual(plain(Game.migrate(savedOpening)),savedCopy,'Existing games must not be redealt');
+console.log('PASS: 5000 paired opening distributions; mild 5-9 and X reductions for both players, unchanged clues and saved games.');
