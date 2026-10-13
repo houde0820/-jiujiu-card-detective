@@ -156,6 +156,14 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
 :root[data-theme="garden"] .hero{border-radius:21px}:root[data-theme="garden"] .hero:before{width:40px;height:40px;top:10px;right:170px}
 @media(max-width:760px){.wrap{padding-top:12px}header{flex-wrap:nowrap;gap:10px;margin-bottom:12px}.brand{gap:9px}.brandmark{width:35px;height:35px;font-size:26px;margin:0}h1{font-size:19px}.tools{display:flex;width:auto;flex-shrink:0}.hero{padding:12px 14px;gap:10px;flex-wrap:nowrap;min-height:62px;margin-bottom:15px}.hero h2{font-size:17px;line-height:1.4}.turnpill{font-size:10px;padding:7px 9px}.boardhead{padding:10px 12px}.columns{padding:9px;gap:7px}.between{padding:15px 0 12px}.cards{min-height:94px}.boardfooter{padding:9px 12px}.dialog{padding:22px 19px}.player strong{font-size:13px}}
 @media(max-width:350px){h1{font-size:17px}.hero{padding:10px}.hero h2{font-size:15px}.turnpill{padding:6px 7px;font-size:9px}.columns{gap:6px}.brandmark{width:31px;height:31px;font-size:23px}}
+
+/* Keep feedback beside the player name; lanes are inferred from position and cards. */
+.boardhead .player,.boardhead .counter{flex-shrink:0}
+.boardhead .feedback{flex:1;min-width:0;margin:0 8px;line-height:1.5}
+.boardhead .feedback:empty{display:none}
+:root[data-theme="garden"] .boardhead .feedback{color:var(--wood-text)}
+.col{padding-top:9px}
+@media(max-width:760px){.boardhead{flex-wrap:wrap;gap:8px}.boardhead .counter{margin-left:auto}.boardhead .feedback{order:3;flex-basis:100%;margin:0;font-size:11px}.col{padding-top:7px}}
 </style>
 </head>
 <body>
@@ -163,7 +171,7 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
 <header><div class="brand"><div class="brandmark" aria-hidden="true">×</div><h1>九九乘法牌</h1></div><div class="tools"><button class="ghost" id="settingsBtn">设置</button></div></header>
 <section class="hero"><h2 id="heroTitle">每一张牌，都藏着线索。</h2><div class="turnpill" id="turnPill">准备开始</div></section>
 <main class="layout" id="gameArea">
-<div><section class="panel" aria-label="对方的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">?</span><div><strong id="opponentName">电脑小侦探</strong></div></div><div class="counter" id="opponentCount"></div></div><div class="columns" id="opponentBoard"></div><div class="boardfooter"><div id="feedback" class="feedback" aria-live="polite"></div><div id="inlineHints" hidden><div class="misses-note" id="missesNote" hidden></div><button class="hintbtn" id="hintBtn">看看可能的数字</button><div id="hintArea" hidden><div class="candidates" id="candidates"></div></div></div></div></section><div class="between" id="deckCount">公共牌堆 · 两人共用</div><section class="panel" aria-label="自己的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">=</span><div><strong id="ownName">我的牌</strong></div></div><div class="counter" id="ownCount"></div></div><div class="columns" id="ownBoard"></div></section></div>
+<div><section class="panel" aria-label="对方的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">?</span><div><strong id="opponentName">电脑小侦探</strong></div></div><div id="feedback" class="feedback" aria-live="polite"></div><div class="counter" id="opponentCount"></div></div><div class="columns" id="opponentBoard"></div><div class="boardfooter"><div id="inlineHints" hidden><div class="misses-note" id="missesNote" hidden></div><button class="hintbtn" id="hintBtn">看看可能的数字</button><div id="hintArea" hidden><div class="candidates" id="candidates"></div></div></div></div></section><div class="between" id="deckCount">公共牌堆 · 两人共用</div><section class="panel" aria-label="自己的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">=</span><div><strong id="ownName">我的牌</strong></div></div><div class="counter" id="ownCount"></div></div><div class="columns" id="ownBoard"></div></section></div>
 
 </main>
 </div>
@@ -251,10 +259,10 @@ function start(){cancelAI();const [min,max]=$('range').value.split('-').map(Numb
 function board(target,owner,isOwn){
  const root=$(target);root.replaceChildren();
  for(let col=3;col>=0;col--){
-  const section=document.createElement('div');section.className='col';const title=document.createElement('div');title.className='coltitle';title.textContent=col*10+'–'+(col*10+9);section.append(title);const list=document.createElement('div');list.className='cards';
+  const section=document.createElement('div');section.className='col';const list=document.createElement('div');list.className='cards';
   const cards=state.players[owner].table.filter(c=>c.column===col);
   for(const card of cards){const face=isOwn||card.revealed||review;const editing=!face&&selected===card.id&&canGuess();const marked=!card.revealed&&card.misses.length>0;const el=document.createElement(editing?'form':'button');if(!editing)el.type='button';el.className='card '+(card.revealed?'known':face?'own':'back')+(selected===card.id&&!isOwn?' selected':'')+(marked?' missed':'');if(!editing)el.disabled=isOwn||card.revealed||!canGuess()||review;
-   el.setAttribute('aria-label',face?'数字'+card.n+(card.revealed?'，已猜中':'，背面提示'+card.factor):title.textContent+'列，提示'+card.factor+'，从下第'+(list.children.length+1)+'张');
+   el.setAttribute('aria-label',face?'数字'+card.n+(card.revealed?'，已猜中':'，背面提示'+card.factor):'从右第'+(col+1)+'列，提示'+card.factor+'，从下第'+(list.children.length+1)+'张');
    if(marked){const note='这张牌猜错过：'+card.misses.join('、');el.title=note;el.setAttribute('aria-label',el.getAttribute('aria-label')+'，'+note);}
    if(editing){
     el.className='card editor selected';el.removeAttribute('aria-label');el.id='guessForm';
@@ -284,7 +292,7 @@ function render(){
  $('deckCount').textContent='公共牌堆 · '+state.deck.length+' 张';
  board('opponentBoard',other,false);board('ownBoard',me,true);
  const card=activeCard();$('missesNote').hidden=!card?.misses.length;$('missesNote').textContent=card?.misses.length?'这张牌猜错过：'+card.misses.join('、'):'';$('inlineHints').hidden=!canGuess()||!card;$('hintBtn').disabled=!canGuess()||!card;
- $('feedback').textContent=state.moves?state.message:'';$('feedback').closest('.boardfooter').hidden=!state.moves&&!card;
+ $('feedback').textContent=state.moves?state.message:'';$('inlineHints').closest('.boardfooter').hidden=$('inlineHints').hidden;
  $('hintBtn').textContent=hints?'收起推理提示':'看看可能的数字';$('hintArea').hidden=!hints||!card;$('candidates').replaceChildren();
  if(hints&&card){for(const n of Game.candidates(state,me,card)){const button=document.createElement('button');button.className='candidate';button.textContent=n;button.onclick=()=>{draft=String(n);$('guessInput').value=draft;$('guessInput').focus();};$('candidates').append(button);}}
  $('modeChip').textContent=state.config.mode==='local'?'双人':'人机';$('log').replaceChildren();
