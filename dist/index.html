@@ -49,7 +49,7 @@
   --grid: #8251b208; --glow: #efddf7; --shade: #43345112;
 }
 :root[data-theme="garden"] {
-  --ink: #304025; --muted: #65734e; --page: #edf3d9; --surface: #fffef3;
+  --ink: #304025; --muted: #65734e; --page: #bfd887; --surface: #fff3d2;
   --surface-soft: #f2f6e2; --line: #d7dfb6; --edge: #b6c68b;
   --primary: #39752d; --primary-dark: #244e21; --primary-light: #6b9d43;
   --accent: #ffdf65; --accent-ink: #65481d; --focus: #b65c21;
@@ -107,44 +107,6 @@ footer{font-size:10px;line-height:1.9;color:var(--muted);margin-top:25px;text-al
 @media(max-width:420px){.hero{flex-wrap:wrap;gap:15px}.hero h2{font-size:23px}.turnpill{padding:8px 11px}.sidebar{grid-template-columns:1fr}.card{height:90px}.theme-picker{gap:5px}.theme-picker:before{margin-right:2px}.theme-picker select{max-width:114px}.caption{font-size:9px}.counter{padding:5px 6px;font-size:9px}.player strong{font-size:13px}.avatar{width:31px;height:31px}.boardhead{padding:13px 11px}.columns{padding:9px;gap:6px}.col{padding:4px 3px 11px}.card .small{font-size:7px}.between:after{display:none}}
 @media(max-width:350px){.card.editor{width:72px;max-width:none;outline-width:2px;outline-offset:2px}.editor input{font-size:18px}.editor-controls button{width:23px;height:27px}.theme-picker select{max-width:104px}.tools{gap:7px}.ghost{padding:10px}.subtitle{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
-<style id="gardenSkin">
-/* Garden skin: component decorations stay here, separate from game layout. */
-:root[data-theme="garden"] body{background-image:radial-gradient(ellipse at 5% 0,var(--glow),transparent 50%),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:auto,46px 46px,46px 46px}
-:root[data-theme="garden"] .brandmark{border-radius:50%;border:4px solid var(--own-line);box-shadow:0 0 0 5px var(--accent),0 5px 0 var(--own-line);transform:rotate(-8deg);margin:4px}
-:root[data-theme="garden"] .hero{background:linear-gradient(115deg,var(--primary-dark),var(--primary) 65%,var(--primary-light));border:4px solid var(--wood);box-shadow:0 5px 0 var(--wood-dark),0 15px 25px var(--shade);border-radius:25px}
-:root[data-theme="garden"] .hero:before{width:72px;height:72px;right:195px;top:18px;border:8px solid var(--accent);background:var(--accent);border-radius:50%;opacity:.5;box-shadow:0 0 0 9px color-mix(in srgb,var(--accent) 30%,transparent);transform:none}
-:root[data-theme="garden"] .hero:after{width:150px;height:50px;right:135px;top:auto;bottom:-15px;border:0;background:var(--grass-light);border-radius:100% 0 100% 0;opacity:.35;box-shadow:-50px -16px 0 var(--grass);transform:rotate(-15deg)}
-:root[data-theme="garden"] .turnpill{border-color:var(--own-line);box-shadow:0 4px 0 var(--wood-dark);border-radius:14px}
-:root[data-theme="garden"] .panel{border-color:var(--wood-light);box-shadow:0 5px 0 var(--wood-dark),0 13px 24px var(--shade)}
-:root[data-theme="garden"] .boardhead{background:repeating-linear-gradient(0deg,transparent 0 17px,var(--shade) 18px 19px),linear-gradient(100deg,var(--wood),var(--wood-light));border-bottom-color:var(--wood-dark);color:var(--wood-text)}
-:root[data-theme="garden"] .caption{color:var(--wood-text);opacity:.85}
-:root[data-theme="garden"] .counter{background:var(--own-bg);border-color:var(--own-line);color:var(--muted);box-shadow:0 2px 0 var(--wood-dark)}
-:root[data-theme="garden"] .avatar{border:2px solid var(--stone-dark);border-radius:16px 16px 9px 9px;background:var(--stone-light);color:var(--stone-dark);box-shadow:0 3px 0 var(--stone-dark)}
-:root[data-theme="garden"] .panel[aria-label="自己的牌"] .avatar{background:var(--accent);border-color:var(--own-line);color:var(--accent-ink);border-radius:50%;box-shadow:0 3px 0 var(--wood-dark)}
-:root[data-theme="garden"] .columns{background:linear-gradient(90deg,var(--lane-1-soft),var(--lane-3-soft))}
-:root[data-theme="garden"] .col{background-image:repeating-linear-gradient(0deg,transparent 0 41px,var(--grid) 42px 43px);border-color:var(--edge)}
-:root[data-theme="garden"] .coltitle{background:var(--own-bg);color:var(--wood-dark);border:1px solid var(--own-line);box-shadow:0 3px 0 var(--wood-light);border-radius:7px;position:relative}
-:root[data-theme="garden"] .coltitle:after{content:"";position:absolute;width:2px;height:7px;background:var(--wood-light);bottom:-7px;left:50%}
-:root[data-theme="garden"] .card.back{background:linear-gradient(150deg,var(--stone-light),var(--stone) 65%);border-color:var(--stone-dark);border-radius:23px 23px 11px 11px;box-shadow:0 4px 0 var(--stone-dark),0 7px 12px var(--shade);color:var(--on-primary)}
-:root[data-theme="garden"] .card.back:before{border-radius:17px 17px 6px 6px;opacity:.3}
-:root[data-theme="garden"] .card.back:hover:not(:disabled){box-shadow:0 7px 0 var(--stone-dark),0 11px 15px var(--shade)}
-:root[data-theme="garden"] .card.back:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 11px 16px,var(--stone-dark) 2px,transparent 2.5px),radial-gradient(circle at calc(100% - 11px) 16px,var(--stone-dark) 2px,transparent 2.5px)}
-:root[data-theme="garden"] .card.own{border-radius:10px;background:linear-gradient(var(--own-bg) 0 76%,var(--lane-1) 76%);border-color:var(--own-line);box-shadow:0 4px 0 var(--own-line)}
-:root[data-theme="garden"] .card.own:before{border-radius:5px;opacity:.2}
-:root[data-theme="garden"] .card.own:not(.known):after{content:"";position:absolute;top:9px;left:9px;width:11px;height:7px;border-radius:90% 0 90% 0;background:var(--primary);transform:rotate(-20deg);box-shadow:5px 2px 0 var(--grass-light)}
-:root[data-theme="garden"] .card.known{background:var(--success-bg);border-color:var(--success);box-shadow:0 3px 0 var(--edge)}
-:root[data-theme="garden"] .card.missed{border-color:var(--miss-line);box-shadow:0 4px 0 var(--miss-line)}
-:root[data-theme="garden"] .card.editor{border-radius:var(--radius-card);background:var(--accent);box-shadow:0 4px 0 var(--own-line)}
-:root[data-theme="garden"] .between{color:var(--primary-dark)}
-:root[data-theme="garden"] .between:before{border-color:var(--wood-dark);background:var(--own-bg);box-shadow:-4px 3px 0 var(--page),-5px 4px 0 var(--wood)}
-:root[data-theme="garden"] .tips{background:var(--own-bg);border-color:var(--wood-light);box-shadow:0 4px 0 var(--wood-dark);border-radius:14px}
-:root[data-theme="garden"] .tips:before{background:var(--grass);opacity:.7}
-:root[data-theme="garden"] .journal h3:before{border-color:var(--wood)}
-:root[data-theme="garden"] .ghost{background:var(--own-bg);border-color:var(--wood-light);box-shadow:0 3px 0 var(--wood-dark);color:var(--wood-dark)}
-:root[data-theme="garden"] #settingsBtn{background:var(--accent);border-color:var(--own-line);box-shadow:0 3px 0 var(--wood-dark)}
-:root[data-theme="garden"] .dialog{border-color:var(--wood-light);background:var(--surface);box-shadow:0 7px 0 var(--wood-dark),0 25px 70px var(--shade)}
-@media(max-width:760px){:root[data-theme="garden"] .hero:before{right:38px;top:20px;width:54px;height:54px;opacity:.22}:root[data-theme="garden"] .hero:after{right:15px}:root[data-theme="garden"] .card.back{border-radius:20px 20px 10px 10px}}
 </style>
 <style id="compactLayout">
 /* Keep the play surface compact; reference material lives in Settings. */
@@ -206,6 +168,147 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
  .gamebar .turnpill{padding:4px 5px;font-size:9px;border-width:1px;border-radius:8px;box-shadow:0 2px 0 var(--primary-dark)}
  .gamebar .ghost{padding:8px 7px;font-size:10px}
 }
+</style>
+<style id="gardenSkin">
+/* Classic lawn and seed-bank skin. All decoration is scoped to this theme. */
+:root[data-theme="garden"] body{
+ background-color:var(--page);
+ background-image:linear-gradient(180deg,#dcefbf 0,#b6d67b 240px,transparent 600px),repeating-linear-gradient(0deg,#79ad4a12 0 46px,#47762c12 46px 92px);
+ background-size:auto;
+}
+:root[data-theme="garden"] .gamebar{
+ padding:10px 12px;gap:15px;border:3px solid var(--wood-dark);border-radius:13px;
+ background:repeating-linear-gradient(0deg,transparent 0 17px,#57361a16 18px 20px),linear-gradient(#b98a52,#95633c);
+ box-shadow:inset 0 2px 0 #e3ba76,0 4px 0 #624023,0 9px 16px #294b2524;
+}
+:root[data-theme="garden"] .gamebar h1{
+ color:#fff3bc;font-size:22px;letter-spacing:1px;transform:rotate(-2deg);
+ text-shadow:1px 1px 0 #49351f,-1px -1px 0 #49351f,2px 3px 0 #49351f;
+}
+:root[data-theme="garden"] .brandmark{position:relative;width:38px;height:38px;flex-shrink:0;background:none;border:0;border-radius:0;box-shadow:none;font-size:0;margin:0;transform:rotate(-9deg)}
+:root[data-theme="garden"] .brandmark:before{content:"";position:absolute;inset:0;background:#ffd62c;filter:drop-shadow(0 2px 0 #926020);clip-path:polygon(50% 0,60% 17%,75% 7%,78% 26%,95% 25%,86% 43%,100% 50%,84% 60%,93% 76%,74% 77%,75% 95%,57% 85%,50% 100%,40% 84%,24% 93%,23% 74%,5% 75%,15% 57%,0 50%,17% 40%,7% 24%,26% 23%,25% 5%,43% 15%)}
+:root[data-theme="garden"] .brandmark:after{content:"";position:absolute;inset:9px;border:2px solid #cc8c20;border-radius:50%;background:radial-gradient(circle at 35% 25%,#fff6a0,#ffc833 72%);box-shadow:inset 0 1px 0 #fff8c1}
+:root[data-theme="garden"] .gamebar .hero{
+ background:repeating-linear-gradient(90deg,transparent 0 96px,#9b79501c 96px 98px),linear-gradient(#f3e6bf,#d9c393);
+ border:2px solid #70502c;border-radius:8px;box-shadow:inset 0 2px 4px #79562b35,0 2px 0 #d5b077;color:#34562b;min-height:50px;padding:9px 13px;
+}
+:root[data-theme="garden"] .hero:before,:root[data-theme="garden"] .hero:after{display:none}
+:root[data-theme="garden"] .gamebar .hero h2{font-size:17px;font-weight:950;letter-spacing:0;text-shadow:0 1px 0 #fff5d8}
+:root[data-theme="garden"] .turnpill{background:linear-gradient(#fff48c,#ffcc37);border:2px solid #9a6828;border-radius:8px;box-shadow:inset 0 1px 0 #fffbc5,0 2px 0 #745020;color:#5f421b;transform:rotate(-1deg)}
+:root[data-theme="garden"] .panel{border:3px solid #6d482a;border-radius:15px;background:#76a93f;box-shadow:0 5px 0 #4e351f,0 10px 18px #294b2528}
+:root[data-theme="garden"] .boardhead{
+ padding:10px 16px;border-bottom:3px solid #5d3b23;color:#fff5d3;
+ background:radial-gradient(circle at 8px 8px,#57402c 2px,transparent 3px),radial-gradient(circle at calc(100% - 8px) 8px,#57402c 2px,transparent 3px),repeating-linear-gradient(0deg,transparent 0 17px,#5437191a 18px 20px),linear-gradient(#a87745,#8b5d36);
+ box-shadow:inset 0 2px 0 #d9a76a;
+}
+:root[data-theme="garden"] .player strong{font-weight:950;text-shadow:1px 2px 0 #644322}
+:root[data-theme="garden"] .avatar{border:2px solid #39532c;border-radius:8px;background:linear-gradient(#b7d16d,#769748);color:#314b26;box-shadow:0 2px 0 #553b25}
+:root[data-theme="garden"] .panel[aria-label="自己的牌"] .avatar{border-radius:50%;border-color:#b78028;background:linear-gradient(#ffef8b,#ffd344);color:#875819}
+:root[data-theme="garden"] .counter{border:2px solid #754a22;border-radius:7px;background:linear-gradient(#fff4b3,#eedb8b);color:#6a5229;box-shadow:inset 0 1px 0 #fff9df,0 2px 0 #654224}
+:root[data-theme="garden"] .counter b{color:#375f25;font-weight:1000;text-shadow:0 1px 0 #fff8d1}
+:root[data-theme="garden"] .boardhead .feedback{border:2px solid #72512d;border-radius:6px;background:linear-gradient(#fff6d8,#eee0b8);color:#405926;box-shadow:inset 0 1px 0 #fffbee,0 2px 0 #674321;font-weight:800}
+:root[data-theme="garden"] .columns{
+ padding:12px;gap:12px;
+ background-image:repeating-linear-gradient(0deg,#ffffff08 0 55px,#244c1a12 55px 110px),linear-gradient(90deg,#79af42,#8fbd51 48%,#6ea33e);
+ box-shadow:inset 0 3px 0 #4c742b,inset 0 -3px 0 #5a8433;
+}
+:root[data-theme="garden"] .col{
+ border:1px solid #4b7b2d99;border-radius:8px;
+ background-color:#a1c76528;
+ background-image:repeating-linear-gradient(0deg,#d8ec9220 0 54px,#416f2720 54px 108px);
+ box-shadow:inset 1px 0 0 #d1eaa847,inset -1px 0 0 #355d2520;
+}
+:root[data-theme="garden"] .col:nth-child(even){background-color:#588c3028}
+:root[data-theme="garden"] .empty{color:#ebf4cf;opacity:.85;text-shadow:0 1px 0 #416c28}
+:root[data-theme="garden"] .card{
+ width:80px;height:110px;border:3px solid #76603c;border-radius:5px;padding:10px 5px 18px;
+ background:linear-gradient(#ead6a2 0 14px,#fff0c9 14px calc(100% - 18px),#ddc08c calc(100% - 18px));
+ box-shadow:inset 0 0 0 2px #fff8d2,0 4px 0 #5c4b2b,0 7px 8px #2d531b3b;color:#315529;
+}
+:root[data-theme="garden"] .card:before{inset:3px;border:1px solid #a78452;opacity:1;border-radius:2px}
+:root[data-theme="garden"] .card:after{content:"";position:absolute;top:5px;left:7px;width:11px;height:6px;border-radius:90% 0 90% 0;background:#416d28;transform:rotate(-25deg);box-shadow:6px 3px 0 #91b944;pointer-events:none}
+:root[data-theme="garden"] .card.back{border-color:#6d5b37;border-radius:5px;background:linear-gradient(#ddc493 0 14px,#f4e6c2 14px calc(100% - 18px),#cab17f calc(100% - 18px));color:#fff6c7;box-shadow:inset 0 0 0 2px #fff6d6,0 4px 0 #55482a,0 7px 8px #2d531b3b}
+:root[data-theme="garden"] .card.back:before{inset:3px;opacity:1;border:1px solid #a78452;border-radius:2px}
+:root[data-theme="garden"] .card .value{
+ display:grid;place-items:center;min-width:48px;min-height:48px;padding:2px 4px;border:2px solid #315323;border-radius:6px;
+ background:radial-gradient(ellipse at 50% 100%,#a4c85744,transparent 65%),linear-gradient(#74a346,#4c812e);
+ color:#fff7c7;font-family:"Arial Rounded MT Bold","Trebuchet MS",var(--font);font-size:34px;font-weight:1000;
+ -webkit-text-stroke:.6px #3a4d20;text-shadow:1px 2px 0 #324e20;box-shadow:inset 0 2px 0 #b1cf74;
+}
+:root[data-theme="garden"] .card .small{position:absolute;bottom:4px;left:3px;right:3px;margin:0;font-size:8px;line-height:1.2;opacity:1;color:#64512e;text-align:center}
+:root[data-theme="garden"] .card.own{border-radius:5px;background:linear-gradient(#eddaaa 0 14px,#fff0ce 14px calc(100% - 18px),#e1c48b calc(100% - 18px));border-color:#6d5b37;box-shadow:inset 0 0 0 2px #fff8d2,0 4px 0 #55482a,0 7px 8px #2d531b3b}
+:root[data-theme="garden"] .card.own:before{border-radius:2px;opacity:1}
+:root[data-theme="garden"] .card.own .value{background:linear-gradient(#d6e89b,#acd16d);color:#2f5126;-webkit-text-stroke:.3px #294622;text-shadow:0 1px 0 #ecf9c9;box-shadow:inset 0 2px 0 #eff8c4}
+:root[data-theme="garden"] .card.known{background:linear-gradient(#d7e6a5 0 14px,#ecf3c9 14px calc(100% - 18px),#b6ce7b calc(100% - 18px));border-color:#416b2c;box-shadow:inset 0 0 0 2px #f2f8d4,0 4px 0 #345321}
+:root[data-theme="garden"] .card.known .value{background:linear-gradient(#d3eaa3,#b1d56f);color:#2f5724;-webkit-text-stroke:.3px #294622;text-shadow:0 1px 0 #f2f7d2;box-shadow:inset 0 2px 0 #eff8c4}
+:root[data-theme="garden"] .card.known .check{top:3px;right:3px;display:grid;place-items:center;width:17px;height:17px;font-size:12px;border-radius:50%;background:#426b2b;color:#fff8dc;z-index:1}
+:root[data-theme="garden"] .card.back:hover:not(:disabled){box-shadow:inset 0 0 0 2px #fff6d6,0 6px 0 #55482a,0 11px 15px #294b2540}
+:root[data-theme="garden"] .card.selected{outline-color:#ffe45c}
+:root[data-theme="garden"] .card.missed{border-color:#bd6529;box-shadow:inset 0 0 0 2px #ffe5b4,0 4px 0 #914a21}
+:root[data-theme="garden"] .card.missed:after{display:none}
+:root[data-theme="garden"] .card.missed .value{min-height:43px;font-size:29px;margin-top:0}
+:root[data-theme="garden"] .card.missed .small{display:block;bottom:20px;font-size:7px;line-height:1.1}
+:root[data-theme="garden"] .miss-badge{top:3px;right:3px;background:#ffe3a4;border:1px solid #ad5e27;border-radius:3px;font-size:7px;padding:2px 4px;color:#7e3d1d}
+:root[data-theme="garden"] .miss-value{position:absolute;bottom:4px;margin:0;border-radius:3px;background:#ffe4a7;color:#81431c;padding:1px 5px;font-size:9px;font-weight:900}
+:root[data-theme="garden"] .card.editor{width:108px;border-radius:6px;border-color:#ab7625;padding:6px;background:linear-gradient(#ffef99,#e9cd66);color:#604a20;box-shadow:inset 0 0 0 2px #fff3b1,0 4px 0 #8c6028}
+:root[data-theme="garden"] .card.editor:before,:root[data-theme="garden"] .card.editor:after{display:none}
+:root[data-theme="garden"] .editor input{border:2px solid #806431;background:#fff8d7;color:#355328;box-shadow:inset 0 2px 2px #76552d22;border-radius:5px}
+:root[data-theme="garden"] .editor-controls button{border:1px solid #49632c;border-radius:4px;box-shadow:0 2px 0 #735324}
+:root[data-theme="garden"] .confirm-guess{background:linear-gradient(#82b44e,#527e32);color:#fff7c7}
+:root[data-theme="garden"] .cancel-guess{background:linear-gradient(#f3ead2,#d0c19d);color:#70512e;border-color:#8c744c!important}
+:root[data-theme="garden"] .between{color:#355723;font-size:12px;font-weight:950;text-shadow:0 1px 0 #e9f4be}
+:root[data-theme="garden"] .between:before{background:linear-gradient(#f3e4b9,#d5bd84);border:2px solid #6a542e;border-radius:3px;box-shadow:-4px 3px 0 #c8d992,-5px 4px 0 #67512e}
+:root[data-theme="garden"] .between:after{background:#547937}
+:root[data-theme="garden"] .boardfooter{background:#dce6b1;border-top:2px solid #607c37}
+:root[data-theme="garden"] .ghost,:root[data-theme="garden"] .close{background:linear-gradient(#e9e4d5,#bcb69e);border:2px solid #685d45;box-shadow:inset 0 1px 0 #fff8e8,0 3px 0 #4d432e;color:#4e4935;border-radius:7px;font-weight:900}
+:root[data-theme="garden"] #settingsBtn{background:linear-gradient(#f0e8cb,#c9b88c);border:2px solid #6c5334;box-shadow:inset 0 1px 0 #fff9e5,0 3px 0 #513e27;color:#4e432d;border-radius:7px}
+:root[data-theme="garden"] .primary{background:linear-gradient(#80a84a,#4b7830);border:2px solid #365322;border-radius:7px;box-shadow:inset 0 1px 0 #a8cb6b,0 4px 0 #365322;color:#fff5c4;text-shadow:0 1px 0 #355221}
+:root[data-theme="garden"] .hintbtn,:root[data-theme="garden"] .candidate{border:2px solid #657d37;border-radius:5px;background:linear-gradient(#f2f0c8,#d4df9d);color:#3c5927;box-shadow:0 2px 0 #607b34}
+:root[data-theme="garden"] .dialog{border:3px solid #795c35;border-radius:13px;background:linear-gradient(#fff1d0,#efe2b6);box-shadow:inset 0 0 0 3px #c8b184,0 7px 0 #574126,0 25px 70px #26442433}
+:root[data-theme="garden"] .dialog h2{color:#40662e;text-shadow:0 1px 0 #fff6d6}
+:root[data-theme="garden"] .dialog select{background:#fff8de;border:2px solid #9c8554;border-radius:6px}
+@media(max-width:760px){
+ :root[data-theme="garden"] .gamebar{padding:7px 8px;gap:9px}
+ :root[data-theme="garden"] .gamebar h1{font-size:16px;letter-spacing:0}
+ :root[data-theme="garden"] .brandmark{width:30px;height:30px}
+ :root[data-theme="garden"] .brandmark:after{inset:7px;border-width:1px}
+ :root[data-theme="garden"] .gamebar .hero{padding:7px 9px;min-height:44px}
+ :root[data-theme="garden"] .gamebar .hero h2{font-size:13px}
+ :root[data-theme="garden"] .turnpill{padding:5px 6px;font-size:10px;border-width:1px}
+ :root[data-theme="garden"] .boardhead{padding:9px 11px}
+ :root[data-theme="garden"] .columns{gap:7px;padding:9px}
+ :root[data-theme="garden"] .card{width:65px;height:96px;padding:9px 3px 16px}
+ :root[data-theme="garden"] .card .value{min-width:41px;min-height:43px;font-size:30px;padding:1px 3px}
+ :root[data-theme="garden"] .card .small{font-size:7px}
+ :root[data-theme="garden"] .card.editor{padding:5px}
+ :root[data-theme="garden"] .card.missed .value{font-size:26px;min-height:39px}
+}
+@media(max-width:420px){
+ :root[data-theme="garden"] .gamebar{padding:5px;gap:5px}
+ :root[data-theme="garden"] .gamebar h1{font-size:12px}
+ :root[data-theme="garden"] .gamebar .hero{padding:7px 5px;min-height:40px;gap:4px}
+ :root[data-theme="garden"] .gamebar .hero h2{font-size:11px}
+ :root[data-theme="garden"] .turnpill{padding:4px;font-size:9px;box-shadow:0 2px 0 #745020}
+ :root[data-theme="garden"] #settingsBtn{padding:7px 6px;font-size:10px}
+ :root[data-theme="garden"] .boardhead{padding:8px}
+ :root[data-theme="garden"] .boardhead .feedback{padding:5px;font-size:10px}
+ :root[data-theme="garden"] .counter{padding:4px;font-size:8px}
+ :root[data-theme="garden"] .counter b{font-size:17px}
+ :root[data-theme="garden"] .card{height:94px}
+ :root[data-theme="garden"] .card .small{font-size:6px}
+ :root[data-theme="garden"] .columns[data-columns="5"]{padding:7px;gap:5px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .card .value{min-width:0;width:100%;min-height:38px;padding:1px;font-size:24px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .card .small{font-size:6px;white-space:normal;bottom:3px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .card:after{width:8px;height:5px;left:4px;top:5px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .card.editor{padding:3px;width:100%;max-width:100%;min-width:0}
+ :root[data-theme="garden"] .columns[data-columns="5"] .editor-label{font-size:7px;max-width:100%;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .editor input{height:28px;font-size:18px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .editor-controls button{height:22px;font-size:15px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .miss-badge{font-size:6px;padding:1px;right:1px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .card.missed .small{bottom:20px;font-size:6px}
+ :root[data-theme="garden"] .columns[data-columns="5"] .miss-value{font-size:8px;padding:1px 3px}
+}
+
 </style>
 </head>
 <body>
@@ -382,7 +485,7 @@ load();if(state){gate=state.config.mode==='local'&&state.winner===null;render();
  function apply(theme){
   if(!allowed.includes(theme))return;
   document.documentElement.dataset.theme=theme;picker.value=theme;
-  document.querySelector('.eyebrow').textContent=theme==='garden'?'LAWN DETECTIVES · 阳光草坪':'NUMBER PLAY LAB · 数字游乐场';
+  document.querySelector('.eyebrow').textContent=theme==='garden'?'SEED BANK · 乘法草坪':'NUMBER PLAY LAB · 数字游乐场';
   document.querySelector('meta[name="theme-color"]').content=getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
  }
  apply(document.documentElement.dataset.theme||'sky');
