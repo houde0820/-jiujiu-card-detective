@@ -2,7 +2,7 @@
 
 按课堂玩法制作的家庭猜牌游戏，支持与电脑对战，以及两人共用一台设备轮流玩。
 
-[GitHub Pages在线游戏](https://houde0820.github.io/-jiujiu-card-detective/)
+[GitHub Pages在线游戏](https://houde0820.github.io/99-card-detective/)
 
 ## 运行
 
@@ -81,7 +81,7 @@ GitHub Pages工作流位于 `.github/workflows/pages.yml`。
 
 GitHub Pages在线预览地址：
 
-<https://houde0820.github.io/-jiujiu-card-detective/>
+<https://houde0820.github.io/99-card-detective/>
 
 GitHub Free支持公开仓库的Pages；私有仓库需要GitHub Pro或其他支持私有Pages的付费方案。保留私有仓库时，先确认账号支持Pages。
 
