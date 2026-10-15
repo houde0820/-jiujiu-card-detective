@@ -282,10 +282,23 @@ header{margin-bottom:14px}.brandmark{width:42px;height:42px;font-size:30px;borde
 }
 
 </style>
+<style id="settingsSwitchStyles">
+.setting-switch{display:flex;gap:4px;padding:4px;border:2px solid var(--line);border-radius:var(--radius-control);background:var(--surface-soft)}
+.setting-switch button{flex:1;min-width:0;border:2px solid transparent;background:transparent;color:var(--muted);padding:10px 5px;font-size:13px;font-weight:800;line-height:1.3;white-space:nowrap;box-shadow:none;transition:background .15s,transform .15s}
+.setting-switch button[aria-pressed="true"]{background:var(--primary);border-color:var(--primary-dark);color:var(--on-primary);box-shadow:0 2px 0 var(--primary-dark)}
+.setting-switch button:disabled{opacity:.4}.setting-switch button:active:not(:disabled){transform:translateY(1px)}
+.dialog .switch-note{margin:6px 2px 0;font-size:11px;line-height:1.5;min-height:0}.switch-note:empty{display:none}
+.gamebar #newGameBtn{padding:11px 14px;font-size:13px;white-space:nowrap}.gamebar.is-finished .turnpill{display:none}
+:root[data-theme="garden"] .setting-switch{border-color:#796e85;background:#aaa2b7;border-radius:9px 7px 5px 8px}
+:root[data-theme="garden"] .setting-switch button{font-family:var(--hand-font);font-size:15px;font-weight:1000;color:#37303f;border-radius:6px 8px 4px 5px}
+:root[data-theme="garden"] .setting-switch button[aria-pressed="true"]{background:linear-gradient(#f1e5b6,#d9c58e);border-color:#71603e;color:#302a20;box-shadow:inset 0 1px 0 #fff2cb,0 2px 0 #665534}
+@media(max-width:760px){.gamebar .tools{gap:6px}.gamebar #newGameBtn{padding:9px 8px;font-size:11px}}
+@media(max-width:420px){.setting-switch{gap:2px;padding:3px}.setting-switch button{font-size:11px;padding:10px 3px}:root[data-theme="garden"] .setting-switch button{font-size:13px}.gamebar #newGameBtn{padding:8px 6px;font-size:10px}.gamebar.is-finished .brandmark{display:none}.gamebar.is-finished h1{font-size:11px}.gamebar.is-finished .hero{padding-left:5px;padding-right:5px}.gamebar.is-finished .tools{gap:5px}}
+</style>
 </head>
 <body>
 <div class="wrap">
-<header class="gamebar"><div class="brand"><div class="brandmark" aria-hidden="true">×</div><h1>九九乘法牌</h1></div><section class="hero" aria-label="对局状态"><h2 id="heroTitle">每一张牌，都藏着线索。</h2><div class="turnpill" id="turnPill"><span id="turnNumber">准备开始</span><span class="turnactor" id="turnActor"></span></div></section><div class="tools"><button class="ghost" id="settingsBtn">设置</button></div></header>
+<header class="gamebar"><div class="brand"><div class="brandmark" aria-hidden="true">×</div><h1>九九乘法牌</h1></div><section class="hero" aria-label="对局状态"><h2 id="heroTitle">每一张牌，都藏着线索。</h2><div class="turnpill" id="turnPill"><span id="turnNumber">准备开始</span><span class="turnactor" id="turnActor"></span></div></section><div class="tools"><button class="primary" id="newGameBtn" hidden>开始新对局</button><button class="ghost" id="settingsBtn">设置</button></div></header>
 <main class="layout" id="gameArea">
 <div><section class="panel" aria-label="对方的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">?</span><div><strong id="opponentName">电脑小侦探</strong></div></div><div id="feedback" class="feedback" aria-live="polite"></div><div class="counter" id="opponentCount"></div></div><div class="columns" id="opponentBoard"></div><div class="boardfooter"><div id="inlineHints" hidden><div class="misses-note" id="missesNote" hidden></div><button class="hintbtn" id="hintBtn">看看可能的数字</button><div id="hintArea" hidden><div class="candidates" id="candidates"></div></div></div></div></section><div class="between" id="deckCount">公共牌堆 · 两人共用</div><section class="panel" aria-label="自己的牌"><div class="boardhead"><div class="player"><span class="avatar" aria-hidden="true">=</span><div><strong id="ownName">我的牌</strong></div></div><div class="counter" id="ownCount"></div></div><div class="columns" id="ownBoard"></div></section></div>
 
@@ -375,6 +388,28 @@ const Game = (() => {
  return {create,migrate,candidates,guess,aiMove,groups};
 })();
 </script>
+<script id="settingsControls">
+// Preserve select values as the configuration source; expose short choices as toggle buttons.
+const SettingsSwitches=(()=>{
+ const choices={
+  mode:['我和电脑','双人轮流'],difficulty:['轻松练习','认真挑战'],
+  range:['初级 1–39','中级 1–49','0–39'],initialCards:['4张','5张','6张'],
+  columnLayout:['右对齐','固定位置'],factorMode:['优先2–9','全部1–9']
+ };
+ const notes={mode:['与电脑对战','两人共用一台设备，轮流查看自己的牌'],difficulty:['随机选择线索','优先猜线索最明确的牌'],range:['共39张牌','共49张牌，增加40–49列','共40张牌，包含0'],initialCards:['','',''],columnLayout:['隐藏列范围，需要结合牌面推理','保留空列和固定位置'],factorMode:['有其他因数可选时优先使用2–9','从合法因数1–9中随机选择']};
+ const groups=[];
+ function sync(){for(const {source,buttons,note} of groups){buttons.forEach((button,i)=>{button.setAttribute('aria-pressed',String(source.value===source.options[i].value));button.disabled=source.disabled;});note.textContent=notes[source.id][source.selectedIndex]??'';}}
+ for(const [id,labels] of Object.entries(choices)){
+  const source=document.getElementById(id),label=document.querySelector('label[for="'+id+'"]');
+  label.id=id+'Label';label.removeAttribute('for');source.hidden=true;
+  const group=document.createElement('div');group.className='setting-switch';group.setAttribute('role','group');group.setAttribute('aria-labelledby',label.id);
+  const note=document.createElement('p');note.className='switch-note';note.id=id+'Note';group.setAttribute('aria-describedby',note.id);
+  const buttons=labels.map((text,i)=>{const button=document.createElement('button');button.type='button';button.textContent=text;button.onclick=()=>{if(source.disabled)return;source.value=source.options[i].value;source.dispatchEvent(new Event('change',{bubbles:true}));sync();};group.append(button);return button;});
+  source.after(group,note);groups.push({source,buttons,note});
+ }
+ sync();return {sync};
+})();
+</script>
 <script>
 (() => {
 const $=id=>document.getElementById(id),key='jiujiu-detective-v1';
@@ -387,8 +422,8 @@ function canGuess(){return state&&state.winner===null&&!gate&&(state.config.mode
 function activeCard(){return selected===null?null:state.players[1-viewer()].table.find(c=>c.id===selected&&!c.revealed);}
 function cancelAI(){clearTimeout(aiTimer);aiTimer=null;}
 function hideOverlay(id){$(id).hidden=true;}
-function syncSettings(){if(!state)return; $('mode').value=state.config.mode;$('difficulty').value=state.config.difficulty;$('range').value=state.config.min+'-'+state.config.max;$('factorMode').value=state.config.factorMode;$('initialCards').value=state.config.initialCards??5;$('columnLayout').value=state.config.compactColumns===false?'fixed':'compact';$('difficulty').disabled=state.config.mode==='local';}
-function openSettings(){syncSettings();$('settingsOverlay').hidden=false;$('closeSettings').hidden=!state;$('savedNotice').hidden=!state;$('settingsTitle').focus({preventScroll:true});$('settingsOverlay').querySelector('.dialog').scrollTop=0;}
+function syncSettings(){if(!state)return; $('mode').value=state.config.mode;$('difficulty').value=state.config.difficulty;$('range').value=state.config.min+'-'+state.config.max;$('factorMode').value=state.config.factorMode;$('initialCards').value=state.config.initialCards??5;$('columnLayout').value=state.config.compactColumns===false?'fixed':'compact';$('difficulty').disabled=state.config.mode==='local';SettingsSwitches.sync();}
+function openSettings(){syncSettings();$('settingsOverlay').hidden=false;$('closeSettings').hidden=!state;$('savedNotice').hidden=!state;$('savedNotice').textContent=state&&state.winner!==null?'上一局已结束，可以调整设置再开始。':'已有进行中的对局，关闭此窗口可以继续。';$('settingsTitle').focus({preventScroll:true});$('settingsOverlay').querySelector('.dialog').scrollTop=0;}
 function start(){cancelAI();const [min,max]=$('range').value.split('-').map(Number);state=Game.create({mode:$('mode').value,difficulty:$('difficulty').value,min,max,initialCards:Number($('initialCards').value),compactColumns:$('columnLayout').value==='compact',factorMode:$('factorMode').value});selected=null;draft='';hints=false;review=false;hideOverlay('settingsOverlay');hideOverlay('winnerOverlay');gate=state.config.mode==='local';save();render();}
 function board(target,owner,isOwn){
  const root=$(target),lastColumn=Math.floor(state.config.max/10),compact=state.config.compactColumns!==false,visible=Game.groups(state.players[owner].table);root.replaceChildren();root.style.setProperty('--column-count',lastColumn+1);root.dataset.columns=lastColumn+1;
@@ -415,6 +450,7 @@ function board(target,owner,isOwn){
 }
 function render(){
  if(!state)return;
+ $('newGameBtn').hidden=state.winner===null;document.querySelector('.gamebar').classList.toggle('is-finished',state.winner!==null);
  $('gameArea').hidden=gate;
  $('gateOverlay').hidden=!gate;
  if(gate){$('gateTitle').textContent='把设备交给'+name(state.turn);$('opponentBoard').replaceChildren();$('ownBoard').replaceChildren();$('readyBtn').focus();return;}
@@ -443,9 +479,9 @@ function applyGuess(actor,id,value){
 function scheduleAI(){if(aiTimer||!state||state.config.mode!=='ai'||state.turn!==1||state.winner!==null)return;aiTimer=setTimeout(()=>{aiTimer=null;if($('settingsOverlay').hidden===false){scheduleAI();return;}const move=Game.aiMove(state);applyGuess(1,move.id,move.value);},1200);}
 function submitGuess(){if(!canGuess()||!activeCard())return;const raw=$('guessInput').value.trim();if(!raw){$('feedback').textContent='先输入你猜的数字吧。';$('feedback').title=$('feedback').textContent;$('guessInput').focus();return;}applyGuess(viewer(),selected,Number(raw));}
 function cancelGuess(){selected=null;draft='';hints=false;render();$('opponentBoard').querySelector('button:not(:disabled)')?.focus();}
-$('hintBtn').onclick=()=>{hints=!hints;render();};$('settingsBtn').onclick=openSettings;$('closeSettings').onclick=()=>hideOverlay('settingsOverlay');$('startBtn').onclick=start;
+$('hintBtn').onclick=()=>{hints=!hints;render();};$('settingsBtn').onclick=openSettings;$('closeSettings').onclick=()=>hideOverlay('settingsOverlay');$('startBtn').onclick=start;$('newGameBtn').onclick=()=>{if(!state||state.winner===null)return;syncSettings();start();};
 $('readyBtn').onclick=()=>{gate=false;render();};$('reviewBtn').onclick=()=>{hideOverlay('winnerOverlay');review=true;render();};$('againBtn').onclick=()=>{hideOverlay('winnerOverlay');openSettings();};
-$('mode').onchange=()=>{$('difficulty').disabled=$('mode').value==='local';};
+$('mode').onchange=()=>{$('difficulty').disabled=$('mode').value==='local';SettingsSwitches.sync();};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state)hideOverlay('settingsOverlay');}if(e.key==='Tab'){const overlay=[...document.querySelectorAll('.overlay')].find(el=>!el.hidden);if(!overlay)return;const focusable=[...overlay.querySelectorAll('button,input,select,summary')].filter(el=>!el.hidden&&!el.disabled&&el.getClientRects().length);const first=focusable[0],last=focusable.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 load();if(state){gate=state.config.mode==='local'&&state.winner===null;render();}else openSettings();
 })();
